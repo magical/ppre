@@ -1,11 +1,11 @@
-# -*- coding: latin-1 -*- 
+# -*- coding: latin-1 -*-
 import codecs
 import xml.dom.minidom
 
 
 class XMLWriter():
     def __init__(self, save):
-        self.datei = codecs.open(save, "w", "utf-8")        
+        self.datei = codecs.open(save, "w", "utf-8")
         xml = u"<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n"
         xml += u"<Poketext version=\"1.0\">\r\n"
         self.datei.write(xml)
@@ -18,21 +18,21 @@ class XMLWriter():
             xml += u"</text>\r\n"
         xml += u"</file>\r\n"
         self.datei.write(xml)
-    def writeFile(self):        
+    def writeFile(self):
         self.datei.write(u"</Poketext>\r\n")
         self.datei.close()
 
-    
+
 class XMLReader:
     def __init__(self, xmlfile):
         self.dom = xml.dom.minidom.parse(xmlfile)
         self.filelist = {}
-        
+
     def liesText(self, knoten):
         for k in knoten.childNodes:
             if k.nodeType == k.TEXT_NODE:
                 return k.nodeValue.strip()
-     
+
     def liesFile(self, knoten):
         for num, elem in enumerate(knoten.getElementsByTagName("file")):
 
@@ -41,26 +41,26 @@ class XMLReader:
                     self.filelist[int(elem.getAttribute("id"))]={}
                 except:
                     print "WARNING: file id must be an integer"
-                    continue 
-                
+                    continue
+
                 for knotenNamen in elem.getElementsByTagName("text"):
                     self.filelist[int(elem.getAttribute("id"))][int(knotenNamen.getAttribute("id"))]=self.liesText(knotenNamen)
-             
-           
-            
-     
+
+
+
+
     def dokument(self, start):
-        i = 0        
+        i = 0
         for elem in start.getElementsByTagName("Poketext"):
             print "Parsing Pokexml Version " + elem.getAttribute("version")
             self.liesFile(elem)
             if i>0:
                 print "WARNING: xml has 2 Poketext sections"
             i = i+1
-            
 
-     
-    def ParseptextXML(self):             
+
+
+    def ParseptextXML(self):
         self.dokument(self.dom)
 
 

@@ -8,5 +8,5 @@ for q in l:
     r[1]=r[1].rstrip("\r\n")
     tb[int(r[0], 16)]=r[1]
     d[r[1]] = int(r[0], 16)
-    
+
 #print tb[3]

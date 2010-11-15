@@ -6,14 +6,14 @@ class byteReader():
         ret = self.a[self.i]
         self.i+=1
         return ret
-    def Read(self, length):	
+    def Read(self, length):
         ret = self.a[self.i:self.i+length]
         """for j in range(0, length):
             ret.append(0x00)
             ret[j] =  self.a[self.i+j]<<(j*8)"""
         self.i += length
         return ret
-    def ReadUInt16(self):	
+    def ReadUInt16(self):
         ret =  (self.a[self.i]|(self.a[self.i+1]<<8))
         self.i+=2
         return ret
@@ -24,7 +24,7 @@ class byteReader():
         ret = temp
         self.i+=2
         return ret
-    def ReadUInt32(self):	
+    def ReadUInt32(self):
         ret =  (self.a[self.i]|(self.a[self.i+1]*1<<8)|(self.a[self.i+2]*1<<16)|(self.a[self.i+3]*1<<24))
         self.i+=4
         return ret
@@ -57,11 +57,11 @@ class byteReader():
     """def WriteByte(self, val):
         self.a[self.i]=val&0xFF
         self.i+=1
-    def WriteUInt16(self, val):	
+    def WriteUInt16(self, val):
         self.a[self.i]=val&0xFF
         self.a[self.i+1]=(val>>8)&0xFF
         self.i+=2
-    def WriteUInt32(self, val):	
+    def WriteUInt32(self, val):
         self.a[self.i]=val&0xFF
         self.a[self.i+1]=(val>>8)&0xFF
         self.a[self.i+2]=(val>>16)&0xFF
@@ -80,10 +80,10 @@ class byteWriter():
         self.a = []
     def WriteByte(self, val):
         self.a.append(val&0xFF)
-    def WriteUInt16(self, val):	
+    def WriteUInt16(self, val):
         self.a.append(val&0xFF)
         self.a.append((val>>8)&0xFF)
-    def WriteUInt32(self, val):	
+    def WriteUInt32(self, val):
         self.a.append(val&0xFF)
         self.a.append((val>>8)&0xFF)
         self.a.append((val>>16)&0xFF)

@@ -8,37 +8,37 @@ import cProfile
 
 
 def ReadMsgNarc():
-	filename=rom.getFolder()+"/header.bin"
-	f=open(filename,"rb")
-	f.seek(9)
-	id=f.read(1)
-	if(id=='L'):
-		filename = rom.getFolder()+"/root/msgdata/pl_msg.narc"
-	elif id in ('G','S'):
-		filename = rom.getFolder()+"/root/a/0/2/7"
-	else:
-		filename = rom.getFolder()+"/root/msgdata/msg.narc"
-	f.close()
-	f = open(filename, "rb")
-	d = f.read()
-	f.close()
-	return narc.NARC(d)
+    filename=rom.getFolder()+"/header.bin"
+    f=open(filename,"rb")
+    f.seek(9)
+    id=f.read(1)
+    if(id=='L'):
+        filename = rom.getFolder()+"/root/msgdata/pl_msg.narc"
+    elif id in ('G','S'):
+        filename = rom.getFolder()+"/root/a/0/2/7"
+    else:
+        filename = rom.getFolder()+"/root/msgdata/msg.narc"
+    f.close()
+    f = open(filename, "rb")
+    d = f.read()
+    f.close()
+    return narc.NARC(d)
 
 def WriteMsgNarc(archive):
-	filename=rom.getFolder()+"/header.bin"
-	f=open(filename,"rb")
-	f.seek(9)
-	id=f.read(1)
-	if(id=='L'):
-		filename = rom.getFolder()+"/root/msgdata/pl_msg.narc"
-	elif id in ('G','S'):
-		filename = rom.getFolder()+"/root/a/0/2/7"
-	else:
-		filename = rom.getFolder()+"/root/msgdata/msg.narc"
-	f.close()
-	f = open(filename, "wb")
-	archive.ToFile(f)
-	f.close()
+    filename=rom.getFolder()+"/header.bin"
+    f=open(filename,"rb")
+    f.seek(9)
+    id=f.read(1)
+    if(id=='L'):
+        filename = rom.getFolder()+"/root/msgdata/pl_msg.narc"
+    elif id in ('G','S'):
+        filename = rom.getFolder()+"/root/a/0/2/7"
+    else:
+        filename = rom.getFolder()+"/root/msgdata/msg.narc"
+    f.close()
+    f = open(filename, "wb")
+    archive.ToFile(f)
+    f.close()
 
 def GetText(index, xmlname):
     archive = ReadMsgNarc()
@@ -46,9 +46,9 @@ def GetText(index, xmlname):
     binary = poketext.PokeTextData(archive.gmif.files[index])
     binary.decrypt()
     xmlout.addStrings(binary.strlist, index)
-    xmlout.writeFile()   
+    xmlout.writeFile()
 
-    #print binary.strlist[0]   
+    #print binary.strlist[0]
 
 
 
@@ -58,18 +58,18 @@ def GetTextAll(xmlname):
     print "| = = = = = = = = = = = = = = = = = = = = | 100%"
     print "|",
     cur = 0
-    
-    # PokeTEXT code    
-    for i in range(len(archive.gmif.files)):        
+
+    # PokeTEXT code
+    for i in range(len(archive.gmif.files)):
         binary = poketext.PokeTextData(archive.gmif.files[i])
-        binary.decrypt()     
+        binary.decrypt()
         xmlout.addStrings(binary.strlist, i)
 
         if (i*20)/623 > cur:
             print "=",
             cur+=1
     print "| Done!"
-        
+
     xmlout.writeFile()
 
 
@@ -91,11 +91,11 @@ def Rewrite(xmlname):
         #print binary.strlist[0]
 
         for replace in xmlr.filelist[fileid]:
-			if replace < len(binary.strlist):
-				binary.strlist[replace]= xmlr.filelist[fileid][replace]
-			else:
-				print "testing"
-				binary.strlist.append(xmlr.filelist[fileid][replace])
+            if replace < len(binary.strlist):
+                binary.strlist[replace]= xmlr.filelist[fileid][replace]
+            else:
+                print "testing"
+                binary.strlist.append(xmlr.filelist[fileid][replace])
         # texttopoke module
         p=texttopoke.Makefile(binary.strlist)
 
@@ -104,7 +104,7 @@ def Rewrite(xmlname):
         encrypt.SetKey(0xD00E)
         encrypt.encrypt()
 
-        #re-archive    
+        #re-archive
         archive.replaceFile(fileid, encrypt.getStr())
     #write narc
     WriteMsgNarc(archive)
@@ -119,7 +119,7 @@ def Rewrite(xmlname):
 #rom and narc code
 print "the NEW Poketext"
 print "(C) 2008/2009 loadingNOW"
-romname = raw_input("Romname:") 
+romname = raw_input("Romname:")
 rom = execute.NDSFILES(romname)
 rom.dump()
 #GetText(341, "MyXML.xml")
@@ -129,18 +129,18 @@ while True:
     s=s.split(" ")
     if s[0]=="get":
         if len(s)==3:
-            print "Trying to dump fileid " + s[1] + " to file: "+ s[2]        
+            print "Trying to dump fileid " + s[1] + " to file: "+ s[2]
             GetText(int(s[1]), s[2])
             print "Done!"
         else:
             print "get [id] [xmlname], id must be an integer, xmlname is the outfile"
-        
+
 #cProfile.run('Rewrite("MyXML2.xml")')
     elif s[0]=="getall":
         if len(s)==2:
             GetTextAll(s[1])
         else:
-            print "getall [xmlfilename]"            
+            print "getall [xmlfilename]"
     elif s[0]=="patch":
         Rewrite(s[1])
     elif s[0]=="mkrom":

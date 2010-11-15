@@ -1,4 +1,4 @@
-# -*- coding: latin-1 -*- 
+# -*- coding: latin-1 -*-
 import unicodeparser
 import array
 
@@ -26,7 +26,7 @@ def ToCode(text,sErrors=False,compressed=False):
                 text = text[6:len(text)]
             elif text[1:2] == 'v':
                 #print "VarPrint"
-                data.append(0xfffe) 
+                data.append(0xfffe)
                 data.append(int(text[2:6], 16))
                 text = text[6:len(text)]
             elif text[1:2] == 'z':
@@ -42,13 +42,13 @@ def ToCode(text,sErrors=False,compressed=False):
                 data.append(w)
                 data.extend(var)
             elif text[1:2]=='n':
-                data.append(0xe000)                 
+                data.append(0xe000)
                 text = text[2:len(text)]
             elif text[1:2]=='r':
-                data.append(0x25BC)                 
+                data.append(0x25BC)
                 text = text[2:len(text)]
             elif text[1:2]=='f':
-                data.append(0x25BD)                 
+                data.append(0x25BD)
                 text = text[2:len(text)]
             else:
                 if errorReport:
@@ -65,22 +65,22 @@ def ToCode(text,sErrors=False,compressed=False):
                 text = text[6-i+1:len(text)]
             else:
                 data.append(unicodeparser.d[text[0:6-i]])
-                text = text[6-i:len(text)]            
+                text = text[6-i:len(text)]
     if compressed:
-		data.append(0x1FF)
-		bits=[]
-		for i in range(0,len(data)):
-			for j in range(0,9):
-				bits.append((data[i]>>j)&1)
-		tmp_uint16=0
-		data=[]
-		data.append(0xF100)
-		for i in range(0,len(bits)):
-			if i%15==0 and i!=0:
-				data.append(tmp_uint16)
-				tmp_uint16=0
-			tmp_uint16|=(bits[i]<<(i%15))
-		data.append(tmp_uint16)
+        data.append(0x1FF)
+        bits=[]
+        for i in range(0,len(data)):
+            for j in range(0,9):
+                bits.append((data[i]>>j)&1)
+        tmp_uint16=0
+        data=[]
+        data.append(0xF100)
+        for i in range(0,len(bits)):
+            if i%15==0 and i!=0:
+                data.append(tmp_uint16)
+                tmp_uint16=0
+            tmp_uint16|=(bits[i]<<(i%15))
+        data.append(tmp_uint16)
     data.append(0xffff)
     a = array.array('H', data)
     return data
@@ -95,13 +95,13 @@ def Makefile(textarr,sError=False,compressed=False):
         ptrtable.extend([base, l])
         rawdata.extend(data)
         base += l*2
-        
+
     hdr = [len(textarr), 0]
-   
+
     #ptrtable.append(array.array('H', rawdata))
     return array.array('H',hdr).tostring() + array.array('I', ptrtable).tostring() +array.array('H', rawdata).tostring()
-        
-    
+
+
 #xml = pokexml.XMLReader("MyXML.xml")
 #xml.ParseptextXML()
 
