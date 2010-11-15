@@ -1,0 +1,37 @@
+PPRE - Project Pokemon ROM Editor
+
+Open source editor for Pokemon games. Licensed under WTFPL.
+
+
+This branch is for cleaning up PPRE, which is an awful mess of spaghetti code.
+
+Sins commited by PPRE:
+    
+    * Not adhering to PEP 8
+       
+       http://www.python.org/dev/peps/pep-0008/
+
+    * Use of eval and exec
+       
+       I'm gonna blame Qt designer for this. However, nothing PPRE does with 
+       eval couldn't be done with getattr() and setattr(). Better solution 
+       is to use lists.
+
+    * Magic constants everywhere
+
+       Mostly related to offsets in the rom and various mapping tables.
+
+       Gonna gather these up, document them, and give them nice, symbolic
+       names.
+
+    * Requires WINE to run on linux
+       ...so it can run ndstool and xdelta. 
+
+       xdelta is open source and is widely available in linux distros. There
+       might even be bindings for Python.
+
+       ndstool is also open source, but i can't get it to compile.
+       An alternative is to grab the Nitro parsing code from 
+       http://git.veekun.com/porigon-z and do the dump natively.
+
+
