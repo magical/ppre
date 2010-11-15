@@ -1,0 +1,62 @@
+<ui version="4.0" >
+ <class>TmHmEditDlg</class>
+ <widget class="QDialog" name="TmHmEditDlg" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>320</width>
+    <height>124</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>TM HM Edit</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset>
+    <normaloff>PPRE.ico</normaloff>PPRE.ico</iconset>
+  </property>
+  <widget class="QComboBox" name="chooseTm" >
+   <property name="geometry" >
+    <rect>
+     <x>20</x>
+     <y>30</y>
+     <width>84</width>
+     <height>27</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="chooseMove" >
+   <property name="geometry" >
+    <rect>
+     <x>120</x>
+     <y>30</y>
+     <width>151</width>
+     <height>27</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>chooseTm</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>TmHmEditDlg</receiver>
+   <slot>changedTm()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>90</x>
+     <y>38</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>113</x>
+     <y>6</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>changedTm()</slot>
+ </slots>
+</ui>

@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>290</width>
+    <height>489</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>PPRE beta 0.13</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>PPRE.ico</normaloff>PPRE.ico</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="openROMButton">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>50</y>
+      <width>105</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Set ROM</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="nameLabel">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>20</y>
+      <width>81</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ROM Name: </string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="nameEdit">
+    <property name="geometry">
+     <rect>
+      <x>152</x>
+      <y>10</y>
+      <width>101</width>
+      <height>29</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pokemoneditButton">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>100</y>
+      <width>105</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Pokemon</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="mapeditButton">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>100</y>
+      <width>105</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Maps</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="moveeditButton">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>140</y>
+      <width>105</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Moves</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="tmhmeditButton">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>140</y>
+      <width>105</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TM/HM</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="itemEdit">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>180</y>
+      <width>105</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Items</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="abilityButton">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>180</y>
+      <width>105</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Abilities</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="scriptButton">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>220</y>
+      <width>105</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Scripts</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="trainerButton">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>220</y>
+      <width>105</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Trainers</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="outputNameEdit">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>270</y>
+      <width>103</width>
+      <height>29</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="writeROMButton">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>310</y>
+      <width>105</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Write ROM</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="chooseROMButton">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>50</y>
+      <width>105</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Choose ROM</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>280</y>
+      <width>111</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>New ROM Name:</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="createPatchButton">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>400</y>
+      <width>105</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Create Patch</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="applyPathButton">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>400</y>
+      <width>105</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Apply Patch</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>80</y>
+      <width>291</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>250</y>
+      <width>291</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>340</y>
+      <width>291</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="patchNameEdit">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>360</y>
+      <width>103</width>
+      <height>29</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>370</y>
+      <width>111</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Patch Name:</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>290</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen_ROM"/>
+   </widget>
+   <addaction name="menuFile"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionOpen_ROM">
+   <property name="text">
+    <string>Open ROM</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>openROMButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>openROM()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>254</x>
+     <y>76</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>289</x>
+     <y>84</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nameEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>openROM()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>252</x>
+     <y>36</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>188</x>
+     <y>74</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pokemoneditButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>openPokeEdit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>112</x>
+     <y>138</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>135</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mapeditButton</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>openMapEdit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>227</x>
+     <y>134</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>289</x>
+     <y>122</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tmhmeditButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>openTmHmEdit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>254</x>
+     <y>166</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>289</x>
+     <y>89</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>moveeditButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>openMoveEdit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>134</x>
+     <y>165</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>289</x>
+     <y>70</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>abilityButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>openAbilityEdit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>254</x>
+     <y>206</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>289</x>
+     <y>88</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>itemEdit</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>openItemEdit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>134</x>
+     <y>206</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>289</x>
+     <y>70</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>scriptButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>openScriptEdit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>85</x>
+     <y>248</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>100</x>
+     <y>281</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>outputNameEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>writeROM()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>239</x>
+     <y>308</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>271</x>
+     <y>285</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>writeROMButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>writeROM()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>206</x>
+     <y>345</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>288</x>
+     <y>300</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>trainerButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>openTrEdit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>201</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>283</x>
+     <y>246</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chooseROMButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>chooseROM()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>63</x>
+     <y>92</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>18</x>
+     <y>89</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>createPatchButton</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>createPatch()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>95</x>
+     <y>436</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>17</x>
+     <y>431</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>applyPathButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>applyPatch()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>230</x>
+     <y>435</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>271</x>
+     <y>431</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>openROM()</slot>
+  <slot>openPokeEdit()</slot>
+  <slot>openMapEdit()</slot>
+  <slot>openTmHmEdit()</slot>
+  <slot>openMoveEdit()</slot>
+  <slot>openAbilityEdit()</slot>
+  <slot>openItemEdit()</slot>
+  <slot>openScriptEdit()</slot>
+  <slot>writeROM()</slot>
+  <slot>openTrEdit()</slot>
+  <slot>chooseROM()</slot>
+  <slot>checkROM()</slot>
+  <slot>createPatch()</slot>
+  <slot>applyPatch()</slot>
+ </slots>
+</ui>

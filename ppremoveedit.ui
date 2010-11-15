@@ -1,0 +1,273 @@
+<ui version="4.0" >
+ <class>MoveEditDlg</class>
+ <widget class="QDialog" name="MoveEditDlg" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>862</width>
+    <height>211</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Move Editor</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset>
+    <normaloff>PPRE.ico</normaloff>PPRE.ico</iconset>
+  </property>
+  <widget class="QComboBox" name="chooseMove" >
+   <property name="geometry" >
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>141</width>
+     <height>27</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="basePower" >
+   <property name="geometry" >
+    <rect>
+     <x>400</x>
+     <y>100</y>
+     <width>58</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="maximum" >
+    <number>255</number>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="effectChance" >
+   <property name="geometry" >
+    <rect>
+     <x>590</x>
+     <y>100</y>
+     <width>58</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="maximum" >
+    <number>255</number>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="accuracy" >
+   <property name="geometry" >
+    <rect>
+     <x>460</x>
+     <y>100</y>
+     <width>58</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="maximum" >
+    <number>255</number>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="pp" >
+   <property name="geometry" >
+    <rect>
+     <x>530</x>
+     <y>100</y>
+     <width>58</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="maximum" >
+    <number>255</number>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="unk1" >
+   <property name="geometry" >
+    <rect>
+     <x>710</x>
+     <y>100</y>
+     <width>58</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="maximum" >
+    <number>255</number>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="priority" >
+   <property name="geometry" >
+    <rect>
+     <x>650</x>
+     <y>100</y>
+     <width>58</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="maximum" >
+    <number>255</number>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="unk2" >
+   <property name="geometry" >
+    <rect>
+     <x>770</x>
+     <y>100</y>
+     <width>58</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="maximum" >
+    <number>255</number>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="catkDesc" >
+   <property name="geometry" >
+    <rect>
+     <x>20</x>
+     <y>130</y>
+     <width>251</width>
+     <height>64</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="atkDesc" >
+   <property name="geometry" >
+    <rect>
+     <x>20</x>
+     <y>60</y>
+     <width>251</width>
+     <height>64</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="effect" >
+   <property name="geometry" >
+    <rect>
+     <x>280</x>
+     <y>10</y>
+     <width>321</width>
+     <height>27</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="type" >
+   <property name="geometry" >
+    <rect>
+     <x>280</x>
+     <y>60</y>
+     <width>111</width>
+     <height>27</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="category" >
+   <property name="geometry" >
+    <rect>
+     <x>400</x>
+     <y>60</y>
+     <width>101</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text" >
+     <string>Physical</string>
+    </property>
+   </item>
+   <item>
+    <property name="text" >
+     <string>Special</string>
+    </property>
+   </item>
+   <item>
+    <property name="text" >
+     <string>Status</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QComboBox" name="target" >
+   <property name="geometry" >
+    <rect>
+     <x>520</x>
+     <y>60</y>
+     <width>231</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text" >
+     <string>Choosen Opponent</string>
+    </property>
+   </item>
+   <item>
+    <property name="text" >
+     <string>Chosen Opponent, Random Attack</string>
+    </property>
+   </item>
+   <item>
+    <property name="text" >
+     <string>Random Opponent</string>
+    </property>
+   </item>
+   <item>
+    <property name="text" >
+     <string>Opponents on Field</string>
+    </property>
+   </item>
+   <item>
+    <property name="text" >
+     <string>All Other on Field</string>
+    </property>
+   </item>
+   <item>
+    <property name="text" >
+     <string>Self</string>
+    </property>
+   </item>
+   <item>
+    <property name="text" >
+     <string>Team</string>
+    </property>
+   </item>
+   <item>
+    <property name="text" >
+     <string>Field</string>
+    </property>
+   </item>
+   <item>
+    <property name="text" >
+     <string>Opponent’s Team</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QComboBox" name="ctype" >
+   <property name="geometry" >
+    <rect>
+     <x>280</x>
+     <y>100</y>
+     <width>111</width>
+     <height>27</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>chooseMove</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MoveEditDlg</receiver>
+   <slot>moveChanged()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>153</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>207</x>
+     <y>16</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>moveChanged()</slot>
+ </slots>
+</ui>
