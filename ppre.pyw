@@ -19,6 +19,7 @@ import ui_ppretredit
 import ui_open
 import texttopoke
 import narc
+import roms
 import execute
 import poketext
 import romerror
@@ -122,7 +123,7 @@ class MainWindow(QMainWindow, ui_ppremain.Ui_MainWindow):
     def openROM(self):
         if not self.nameEdit.text():
             return romerror.noROM()
-        self.rom=execute.NDSFILES(unicode(self.nameEdit.text()))
+        self.rom = execute.NDSFILES(unicode(self.nameEdit.text()))
         self.rom.dump()
         try:
             self.ID=getROMID()
@@ -131,100 +132,17 @@ class MainWindow(QMainWindow, ui_ppremain.Ui_MainWindow):
             del(self.rom)
             return
         self.lang = getLang()
-        self.other=("Pokemon Center","Mart", "GYM")
-        self.DT={}
-        if self.ID == 0x5353:
-            self.romname="Soul Silver"
-            if self.lang==0x4A:
-                self.Of=(0xE56F0,10000 ,0)
-                self.TN=(427,724,711,219,739,232,801,799,803,792,790,720,719)
-                self.DT={"move":739,"contest":207,"type":724}
-            else:
-                self.Of=(0xE56F0,10000 ,0)
-                self.TN=(279,735,720,222,750,237,814,812,803,823,802,730,729)
-                self.DT={"move":750,"contest":207,"type":735}
-        elif self.ID == 0x4748:
-            self.romname="Heart Gold"
-            if self.lang==0x4A:
-                self.Of=(0xE56F0,501 ,1050 )
-                self.TN=(427,724,711,219,739,232,801,799,803,791,790,720,719)
-                self.DT={"move":739,"contest":207,"type":724}
-            else:
-                self.Of=(0xE56F0,10000 ,0)
-                self.TN=(279,735,720,222,750,237,814,812,803,823,802,730,729)#location names = 279?
-                self.DT={"move":750,"contest":207,"type":735}
-        elif self.ID == 0x4C50:
-            self.romname="Platinum"
-            self.DT={"move":647,"contest":208,"type":624}
-            if self.lang==0x44:
-                self.Of=(0xE6074,501, 1050 )
-                self.TN=(433,624,610,392,647,412,709,707,720,706,697,619,618,613)
-            elif self.lang==0x45:#EN
-                self.Of=(0xE601C,501, 1050 )
-                self.TN=(433,624,610,392,647,412,709,707,718,706,697,619,618,613 )
-                self.DT={"move":647,"contest":208,"type":624}
-            elif self.lang==0x46:
-                self.Of=(0xE60A4,501, 1050 )
-                self.TN=(433,624,610,392,647,412,709,707,719,706,697,619,618,613)
-            elif self.lang==0x49:
-                self.Of=(0xE6038,501, 1050 )
-                self.TN=(433,624,610,392,647,412,709,707,721,706,697,619,618,613)
-            elif self.lang==0x4A:
-                self.Of=(0xE56F0,501 ,1050 )
-                self.TN=(427,616,604,390,636,408,696,694,698,693,685,619,618,613)#change tr
-                self.DT={"move":636,"contest":207,"type":616}
-            elif self.lang==0x4B:
-                self.Of=(0xE6AA4,501, 1050 )
-                self.TN=(428,617,605,390,637,408,699,697,696,701,687,619,618,613)#change tr
-            elif self.lang==0x53:
-                self.Of=(0xE60B0,501, 1050 )
-                self.TN=(433,624,610,392,647,412,709,707,722,706,697,619,618,613 )
-        elif self.ID== 0x50:
-            self.romname="Pearl"
-            if self.lang==0x4A:
-                self.Of=(0xF0C2C, )
-                self.TN=(374,555,544,341,575,356,606,605,607,602,600,560,559,555)#change tr
-            elif self.lang==0x45:
-                self.Of=(0xEEDBC, )
-                self.TN=(382,565,552,344,588,362,620,619,621,616,614,560,559,555)
-            elif self.lang==0x44:
-                self.Of=(0xEEDCC, )
-                self.TN=(382,565,552,344,588,362,620,619,621,616,614,560,559,555)
-            elif self.lang==0x46:
-                self.Of=(0xEEDFC, )
-                self.TN=(382,565,552,344,588,362,620,619,621,616,614,560,559,555)
-            elif self.lang==0x49:
-                self.Of=(0xEED70, )
-                self.TN=(382,565,552,344,588,362,620,619,621,616,614,560,559,555)
-            elif self.lang==0x53:
-                self.Of=(0xEEE08, )
-                self.TN=(382,565,552,344,588,362,620,619,621,616,614,560,559,555)
-            elif self.lang==0x4B:
-                self.Of=(0xEA408, )
-                self.TN=(376,557,546,342,577,357,608,606,609,603,602,560,559,555)#change tr
-        elif self.ID==0x44:
-            self.romname="Diamond"
-            if self.lang==0x4A:
-                self.Of=(0xF0C28, )
-                self.TN=(374,555,544,341,575,356,606,605,607,601,600,560,559,555)#change tr
-            elif self.lang==0x45:
-                self.Of=(0xEEDBC, )
-                self.TN=(382,565,552,344,588,362,620,619,621,615,614,560,559,555)
-            elif self.lang==0x44:
-                self.Of=(0xEEDCC, )
-                self.TN=(382,565,552,344,588,362,620,619,621,615,614,560,559,555)
-            elif self.lang==0x46:
-                self.Of=(0xEEDFC, )
-                self.TN=(382,565,552,344,588,362,620,619,621,615,614,560,559,555)
-            elif self.lang==0x49:
-                self.Of=(0xEED70, )
-                self.TN=(382,565,552,344,588,362,620,619,621,615,614,560,559,555)
-            elif self.lang==0x53:
-                self.Of=(0xEEE08, )
-                self.TN=(382,565,552,344,588,362,620,619,621,615,614,560,559,555)
-            elif self.lang==0x4B:
-                self.Of=(0xEA408, )
-                self.TN=(376,557,546,342,577,357,608,606,609,603,602,560,559,555)#change tr
+        self.other=("Pokemon Center", "Mart", "GYM")
+        self.rominfo = roms.getInfo(self.ID, self.lang)
+
+        # Backward compatibility
+        self.romname = self.rominfo.romname
+        self.Of = self.rominfo.offsets
+        self.TN = self.rominfo.textnums
+        self.DT = {"type": self.rominfo.textnums.types,
+                   "move": self.rominfo.textnums.moves,
+                   "contest": self.rominfo.textnums.contest}
+
         self.defMNIndex()
         """self.archive = ReadMsgNarc()
         binary=poketext.PokeTextData(self.archive.gmif.files[self.TN[0]])
@@ -293,6 +211,8 @@ class MainWindow(QMainWindow, ui_ppremain.Ui_MainWindow):
     def loadFail(self):
         QMessageBox.critical(self,"Critical","ROM has not been loaded. Please place your ROM in the same folder as PPRE, type in the name of your ROM (with '.nds'), and click 'Open ROM'.")
 def getROMID():
+    # The header starts out with the name of the game, so the ID is actually 
+    # just the two characters after "POKEMON ".
     if not os.path.isfile(mw.rom.getFolder()+"/header.bin"):
         raise IOError
     filename = mw.rom.getFolder()+"/header.bin"
@@ -305,6 +225,8 @@ def getROMID():
     fh.close()
     return id
 def getLang():
+    # Bytes 12-15 in the header are the serial number of the game, as assigned
+    # by nintendo. The last character seems to indicate the language.
     filename = mw.rom.getFolder()+"/header.bin"
     fh=QFile(filename)
     fh.open(QIODevice.ReadOnly)
