@@ -3281,11 +3281,10 @@ class LoadDlg(QDialog, ui_open.Ui_Dialog):
         self.loadable = []
         self.newload = []
         self.loads = {}
-        for item in os.listdir("."):
-            if item[:4] == "tmp_":
+        for item in os.listdir(os.curdir):
+            if item.startswith("tmp_"):
                 self.loadable.append(item)
-                self.loads[item] = item.lstrip("tmp_")+".nds"
-        for item in os.listdir("."):
+                self.loads[item] = strip_prefix(item, "tmp_") + ".nds"
             if ".nds" in item and item not in self.loads.values():
                 self.newload.append(item)
                 self.loads[item] = item
@@ -3299,10 +3298,17 @@ class LoadDlg(QDialog, ui_open.Ui_Dialog):
         if not self.romchoose.currentItem():
             return romerror.noValue()
         else:
-            mw.nameEdit.setText(str(self.romchoose.currentItem().text()).lstrip("(Saved) "))
+            mw.nameEdit.setText(
+                strip_prefix(str(self.romchoose.currentItem().text()), "(Saved) "))
         self.close()
     def checkROM(self):
-        self.choicename.setText("ROM Name: "+str(self.romchoose.currentItem().text()).lstrip("(Saved) "))
+        self.choicename.setText(
+            "ROM Name: " + strip_prefix(str(self.romchoose.currentItem().text()), "(Saved) "))
+
+def strip_prefix(s, prefix):
+    if s.startswith(prefix):
+        return s[len(prefix):]
+    return s
 
 app = QApplication(sys.argv)
 mw = MainWindow()
