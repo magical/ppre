@@ -1,37 +1,62 @@
 PPRE - Project Pokemon ROM Editor
 
-Open source editor for Pokemon games. Licensed under WTFPL.
+Open source editor for Pokemon games. WTFPL licensed.
+
+http://projectpokemon.org/ppre
 
 
-This branch is for cleaning up PPRE, which is an awful mess of spaghetti code.
+
+If you are just looking to run PPRE, you don't want this branch. This branch
+is an attempt to clean up the awful mess of spaghetti code that is PPRE.
+Due to the extensive nature of the changes in here, PPRE may not work
+properly, or even run. You have been warned.
+
 
 Sins commited by PPRE:
-    
-    * Not adhering to PEP 8
-       
+
+    * Does not adhere to PEP 8
+
+       There's no excuse for this.
+
        http://www.python.org/dev/peps/pep-0008/
 
-    * Use of eval and exec
-       
-       I'm gonna blame Qt designer for this. However, nothing PPRE does with 
-       eval couldn't be done with getattr() and setattr(). Better solution 
-       is to use lists.
+    * Uses eval and exec
 
-    * Magic constants everywhere
+       I'm gonna blame Qt Designer for this. However, nothing PPRE does with
+       eval couldn't be done with getattr() and setattr().
 
-       Mostly related to offsets in the rom and various mapping tables.
+       The better solution, in the long run, is to make liberal use of
+       lists and dictionaries.
 
-       Gonna gather these up, document them, and give them nice, symbolic
-       names.
+    * No documentation
+
+       * Functions and classes are missing docstrings
+       * Magic constants abound with no explanation of what they are for
+       * None of the data structures which PPRE reads are documented
+       * and so on
+
+       Gonna gather up the constants and give them nice, symbolic names.
 
     * Requires WINE to run on linux
-       ...so it can run ndstool and xdelta. 
+
+       There is no reason for this. The two programs PPRE uses WINE to run
+       are ndstool and xdelta.
 
        xdelta is open source and is widely available in linux distros. There
        might even be bindings for Python.
 
        ndstool is also open source, but i can't get it to compile.
-       An alternative is to grab the Nitro parsing code from 
+
+       One option is to grab the Nitro parsing code from
        http://git.veekun.com/porigon-z and do the dump natively.
+
+       Another is to fork ndstool.
+
+    * Does not separate logic and presentation.
+
+       The code for parsing the games' data structures is right there in
+       the GUI code.
+
+
 
 
