@@ -12,6 +12,21 @@ Due to the extensive nature of the changes in here, PPRE may not work
 properly, or even run. You have been warned.
 
 
+
+Cleanup plan:
+
+    1. The first phase will be untangling the core logic from the GUI.
+       Also documenting the data structures used by PPRE and in the games.
+
+    2. The second phase will be cleaning up the GUI code to be more Pythonic
+       and to follow PEP 8.
+
+    3. ???
+
+Cleanup is currently in PHASE 1.
+
+
+
 Sins commited by PPRE:
 
     * Does not adhere to PEP 8
@@ -56,7 +71,6 @@ Sins commited by PPRE:
 
        The code for parsing the games' data structures is right there in
        the GUI code.
-
 
 
 
