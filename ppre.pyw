@@ -1124,15 +1124,15 @@ class PokeEditDlg(QDialog, ui_pprepokeedit.Ui_PokeEditDlg):
     def updatehp(self,event=""):
         self.temp[0]=self.hpspinBox.value
     def updateatk(self,event=""):
-        self.temp[0]=self.hpspinBox.value
+        self.temp[1]=self.atkspinBox.value
     def updatedef(self,event=""):
-        self.temp[0]=self.hpspinBox.value
+        self.temp[2]=self.defspinBox.value
     def updatespd(self,event=""):
-        self.temp[0]=self.hpspinBox.value
+        self.temp[3]=self.spdspinBox.value
     def updatespatk(self,event=""):
-        self.temp[0]=self.hpspinBox.value
+        self.temp[4]=self.spatkspinBox.value
     def updatespdef(self,event=""):
-        self.temp[0]=self.hpspinBox.value
+        self.temp[5]=self.spdefspinBox.value
     def extractToSql(self):
         """print "Success ",
         db=QSqlDatabase.addDatabase("QMYSQL")
