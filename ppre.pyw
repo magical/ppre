@@ -546,7 +546,6 @@ class PokeEditDlg(QDialog, ui_pprepokeedit.Ui_PokeEditDlg):
         self.romnameLabel.setText(self.romname)
         self.choosePokemon.setCurrentIndex(0)
         #self.updateUi()
-        #self.extractToSql()
     def changedPokemon(self,event):
         self.pokeid=self.choosePokemon.currentIndex()
         self.pokeName.setText(self.choosePokemon.currentText())
@@ -1055,335 +1054,6 @@ class PokeEditDlg(QDialog, ui_pprepokeedit.Ui_PokeEditDlg):
         self.temp[4]=self.spatkspinBox.value
     def updatespdef(self,event=""):
         self.temp[5]=self.spdefspinBox.value
-    def extractToSql(self):
-        """print "Success ",
-        db=QSqlDatabase.addDatabase("QMYSQL")
-        db.setHostName("dbs.projectpokemon.org")
-        db.setDatabaseName("pporg_dex")
-        db.setUserName("pporgadmin")
-        db.setPassword("HackingRulez!@#")
-        if not db.open():
-            QMessageBox.warning(None,"Phone Log", QString("Database Error: %1").arg(db.lastError().text()))
-        else:
-            print "Success Again"
-        query=QSqlQuery()
-        query.exec_("CREATE TABLE poke (natid INTEGER PRIMARY KEY UNIQUE NOT NULL,name VARCHAR(10) NOT NULL UTF)")
-        print db.lastError().text()"""
-        iL=""
-        if mw.ID==0x5353:
-            iL+="hgss"
-        elif mw.ID==0x4748:
-            iL+="hgss"
-        elif mw.ID==0x4C50:
-            iL+="pl"
-        elif mw.ID==0x50:
-            iL+="dp"
-        elif mw.ID==0x44:
-            iL+="dp"
-        lL=chr(mw.lang).lower()
-        sf=QFile(iL+"dex"+lL+".sql")
-        sf.open(QIODevice.WriteOnly)
-        ts=QTextStream(sf)
-        ts.setCodec("UTF-8")
-        temptext=poketext.PokeTextData(self.archive.gmif.files[791])
-        temptext.decrypt()
-        ts<<"SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\";\n"
-        ts<<"DROP TABLE IF EXISTS `"+iL+"poke"+lL+"`;\n"
-        ts<<"CREATE TABLE IF NOT EXISTS `"+iL+"poke"+lL+"` (\n"
-        ts<<"  `natid` SMALLINT UNSIGNED,\n"
-        ts<<"  `name` VARCHAR(20),\n"
-        ts<<"  `height` VARCHAR(20),\n"
-        ts<<"  `weight` VARCHAR(20),\n"
-        ts<<"  `desc` TEXT,\n"
-        ts<<"  `dflavortext` TEXT,\n"
-        ts<<"  `numforms` TINYINT,\n"
-        ts<<"  `pflavortext` TEXT,\n"
-        ts<<"  `stats` TINYINT,\n"
-        ts<<"  PRIMARY KEY  (`natid`)\n"
-        ts<<") ENGINE=MyISAM  DEFAULT CHARSET=utf8;\n\n"
-
-        #Begin Inserting
-        ts<<"INSERT INTO `"+iL+"poke"+lL+"` (`natid`,`name`,`height`,`weight`,`desc`,`dflavortext`,`numforms`, `pflavortext`,`stats`) VALUES\n"
-        for i in range (1,494):
-            self.choosePokemon.setCurrentIndex(i)
-            ts<<"("<<i<<", '"<<unicode(self.pokeName.text()).title()<<"', '"<<self.height.text()<<"', '"<<self.weight.text()<<"', '"<<self.description.text()<<"', '"<<self.flavorText.toPlainText().replace("\\n"," ").replace("\\x0001", " ")<<"',"
-            if i== 201:
-                ts<<28<<","
-            elif i== 412:
-                ts<<3<<","
-            elif i== 422 or i==423:
-                ts<<2<<","
-            else:
-                ts<<self.chooseForm.count()<<","
-            ts<<"'"+temptext.strlist[i].replace("\\n"," ").replace("\\x0001", " ")+"',"
-            if i in (201, 412, 422, 423):
-                ts<<1
-            else:
-                ts<<0
-            if i%50 == 0:
-                print i
-            if i==493:
-                ts<<");"
-            else:
-                ts<<"),\n"
-        sf.close()
-        sf=QFile(iL+"data"+lL)
-        sf.open(QIODevice.WriteOnly)
-        ts=QTextStream(sf)
-        ts.setCodec("UTF-8")
-        #arm9filename=mw.rom.getFolder()+"/overlay/overlay_0005.bin"
-        #mfh=QFile(arm9filename)
-        #mfh.open(QIODevice.ReadOnly)
-        #mds=QDataStream(mfh)
-        #mds.setByteOrder(QDataStream.LittleEndian
-        ts<<"DROP TABLE IF EXISTS `data"+iL+"`;\n"
-        ts<<"CREATE TABLE IF NOT EXISTS `data"+iL+"` (\n"
-        ts<<"  `dataid` SMALLINT UNSIGNED,\n"
-        ts<<"  `natid` SMALLINT UNSIGNED,\n"
-        ts<<"  `basehp` SMALLINT UNSIGNED,\n"
-        ts<<"  `baseatk` SMALLINT UNSIGNED,\n"
-        ts<<"  `basedef` SMALLINT UNSIGNED,\n"
-        ts<<"  `basespd` SMALLINT UNSIGNED,\n"
-        ts<<"  `basespatk` SMALLINT UNSIGNED,\n"
-        ts<<"  `basespdef` SMALLINT UNSIGNED,\n"
-        ts<<"  `type1` TINYINT,\n"
-        ts<<"  `type2` TINYINT,\n"
-        ts<<"  `item1` SMALLINT,\n"
-        ts<<"  `item2` SMALLINT,\n"
-        ts<<"  `ability1` SMALLINT,\n"
-        ts<<"  `ability2` SMALLINT,\n"
-        ts<<"  `steps` SMALLINT UNSIGNED,\n"
-        ts<<"  `basehappiness` TINYINT UNSIGNED,\n"
-        ts<<"  `runchance` TINYINT UNSIGNED,\n"
-        ts<<"  `genderval` TINYINT UNSIGNED,\n"
-        ts<<"  `maxexp` VARCHAR(20),\n"
-        ts<<"  `baseexp` SMALLINT,\n"
-        ts<<"  `egggroup1` TINYINT,\n"
-        ts<<"  `egggroup2` TINYINT,\n"
-        ts<<"  `catchrate` SMALLINT,\n"
-        ts<<"  `hpev` TINYINT,\n"
-        ts<<"  `atkev` TINYINT,\n"
-        ts<<"  `defev` TINYINT,\n"
-        ts<<"  `spdev` TINYINT,\n"
-        ts<<"  `spatkev` TINYINT,\n"
-        ts<<"  `spdefev` TINYINT,\n"
-        ts<<"  `color` SMALLINT,\n"
-        ts<<"  PRIMARY KEY  (`dataid`)\n"
-        ts<<") ENGINE=MyISAM  DEFAULT CHARSET=utf8;\n\n"
-
-        #Begin Inserting Data
-        ts<<"INSERT INTO `data"+iL+"` (`dataid`,`natid`,`basehp`,`baseatk`,`basedef`,`basespd`,`basespatk`,`basespdef`,`type1`,`type2`,`item1`,`item2`,`ability1`,`ability2`,`steps`,`basehappiness`,`runchance`,`genderval`,`maxexp`,`baseexp`,`egggroup1`, `egggroup2`,`catchrate`,`hpev`,`atkev`,`defev`,`spdev`,`spatkev`,`spdefev`,`color`) VALUES\n"
-        for i in range (1,494):
-            self.choosePokemon.setCurrentIndex(i)
-            for j in range(0,len(self.dataids)):
-                self.chooseForm.setCurrentIndex(j)
-                ts<<"("<<self.dataids[j]<<","<<i<<","<<self.hpspinBox.value()
-                ts<<","<<self.atkspinBox.value()<<","<<self.defspinBox.value()
-                ts<<","<<self.spdspinBox.value()<<","<<self.spatkspinBox.value()
-                ts<<","<<self.spdefspinBox.value()<<","
-                ts<<self.type1.currentIndex()<<", "<<self.type2.currentIndex()<<", "
-                ts<<self.heldItem1.currentIndex()<<", "<<self.heldItem2.currentIndex()<<","
-                ts<<self.ability1.currentIndex()<<","<<self.ability2.currentIndex()<<","
-                ts<<self.stepsMultiplier.value()*256<<","<<self.baseHappiness.value()<<","
-                ts<<self.runChance.value()<<","<<self.genderVal.value()<<","
-                ts<<"'"<<self.maxExp.currentText()<<"'"<<","<<self.baseExp.value()<<","
-                ts<<self.eggGroup1.currentIndex()
-                ts<<","<<self.eggGroup2.currentIndex()
-                ts<<","<<self.catchRate.value()
-                ts<<","<<self.hpEvs.value()<<","<<self.atkEvs.value()<<","<<self.defEvs.value()<<","<<self.spdEvs.value()<<","<<self.spatkEvs.value()<<","<<self.spdefEvs.value()
-                ts<<","<<self.colorVal.value()
-                if i%50 == 0:
-                    print i
-                if i==493:
-                    ts<<");"
-                else:
-                    ts<<"),\n"
-        sf.close()
-        sf=QFile(iL+"lvlmoves.sql")
-        sf.open(QIODevice.WriteOnly)
-        ts=QTextStream(sf)
-        ts.setCodec("UTF-8")
-        ts<<"DROP TABLE IF EXISTS `lvlmv"+iL+"`;\n"
-        ts<<"CREATE TABLE IF NOT EXISTS `lvlmv"+iL+"` (\n"
-        ts<<"  `natid` SMALLINT UNSIGNED,\n"
-        ts<<"  `form` TINYINT,\n"
-        ts<<"  `lvl` TINYINT,\n"
-        ts<<"  `moveid` SMALLINT\n"
-        ts<<") ENGINE=MyISAM  DEFAULT CHARSET=utf8;\n\n"
-
-        #Begin Inserting
-        ts<<"INSERT INTO `lvlmv"+iL+"` (`natid`,`form`, `lvl`, `moveid`) VALUES\n"
-        for i in range (1,494):
-            self.choosePokemon.setCurrentIndex(i)
-            for j in range(0,len(self.dataids)):
-                self.chooseForm.setCurrentIndex(j)
-                for k in range(0,self.nummoves):
-                    ts<<"("<<i<<","<<j<<","<<self.movelvllist[k].value()<<","<<self.movelist[k].currentIndex()<<"),\n"
-                if i%50 == 0:
-                    print i
-                if i==493:
-                    print "done"
-        sf.close()
-        sf=QFile(iL+"forms"+lL+".sql")
-        sf.open(QIODevice.WriteOnly)
-        ts=QTextStream(sf)
-        ts.setCodec("UTF-8")
-        ts<<"DROP TABLE IF EXISTS `formnames"+iL+lL+"`;\n"
-        ts<<"CREATE TABLE IF NOT EXISTS `formnames"+iL+lL+"` (\n"
-        ts<<"  `natid` SMALLINT UNSIGNED,\n"
-        ts<<"  `form` TINYINT,\n"
-        ts<<"  `name` VARCHAR(30)\n"
-        ts<<") ENGINE=MyISAM  DEFAULT CHARSET=utf8;\n\n"
-
-        #Begin Inserting
-        ts<<"INSERT INTO `formnamesdpkr` (`natid`,`form`, `name`) VALUES\n"
-        binary=poketext.PokeTextData(self.archive.gmif.files[mw.TN[10]])
-        binary.decrypt()
-        for i in range (1,494):
-            self.choosePokemon.setCurrentIndex(i)
-            for j in range(0,len(self.dataids)):
-                self.chooseForm.setCurrentIndex(j)
-                if i not in (201, 412, 422, 423):
-                    ts<<"("<<i<<","<<j<<",'"<<self.chooseForm.currentText()<<"'),\n"
-                else:
-                    if i in (422,  423):
-                        ts<<"("<<i<<","<<0<<",'"<<binary.strlist[15]<<"'),\n"
-                        ts<<"("<<i<<","<<1<<",'"<<binary.strlist[16]<<"'),\n"
-                    elif i == 412:
-                        ts<<"("<<i<<","<<0<<",'"<<binary.strlist[17]<<"'),\n"
-                        ts<<"("<<i<<","<<1<<",'"<<binary.strlist[18]<<"'),\n"
-                        ts<<"("<<i<<","<<2<<",'"<<binary.strlist[19]<<"'),\n"
-                    else:
-                        for k in range(0, 26):
-                            ts<<"("<<i<<","<<k<<",'"<<self.choosePokemon.currentText()+" "+chr(65+k)<<"'),\n"
-                        ts<<"("<<i<<","<<26<<",'"<<self.choosePokemon.currentText()+" !"<<"'),\n"
-                        ts<<"("<<i<<","<<27<<",'"<<self.choosePokemon.currentText()+" ?"<<"'),\n"
-                if i%50 == 0:
-                    print i
-                if i==493:
-                    print "done"
-        sf.close()
-        sf=QFile(iL+"tms.sql")
-        sf.open(QIODevice.WriteOnly)
-        ts=QTextStream(sf)
-        ts.setCodec("UTF-8")
-        ts<<"DROP TABLE IF EXISTS `tms"+iL+"`;\n"
-        ts<<"CREATE TABLE IF NOT EXISTS `tms"+iL+"` (\n"
-        ts<<"  `natid` SMALLINT UNSIGNED,\n"
-        ts<<"  `form` TINYINT,\n"
-        ts<<"  `tm` TINYINT\n"
-        ts<<") ENGINE=MyISAM  DEFAULT CHARSET=utf8;\n\n"
-
-        #Begin Inserting
-        ts<<"INSERT INTO `tms"+iL+"` (`natid`,`form`, `tm`) VALUES\n"
-        for i in range (1,494):
-            self.choosePokemon.setCurrentIndex(i)
-            for j in range(0,len(self.dataids)):
-                self.chooseForm.setCurrentIndex(j)
-                tempbool=False
-                for k in range(0,92):
-                    if self.tmlist[k].isChecked():
-                        ts<<"("<<i<<","<<j<<","<<k+1<<"),\n"
-                if i%50 == 0:
-                    print i
-                if i==493:
-                    print "done"
-        sf.close()
-        #hm table
-        sf=QFile(iL+"plhms.sql")
-        sf.open(QIODevice.WriteOnly)
-        ts=QTextStream(sf)
-        ts.setCodec("UTF-8")
-        ts<<"DROP TABLE IF EXISTS `hms"+iL+"`;\n"
-        ts<<"CREATE TABLE IF NOT EXISTS hms"+iL+"` (\n"
-        ts<<"  `natid` SMALLINT UNSIGNED,\n"
-        ts<<"  `form` TINYINT,\n"
-        ts<<"  `hm` TINYINT,\n"
-        ts<<") ENGINE=MyISAM  DEFAULT CHARSET=utf8;\n\n"
-
-        #Begin Inserting
-        ts<<"INSERT INTO `hms"+iL+"` (`natid`,`form`, `hm`) VALUES\n"
-        for i in range (1,494):
-            self.choosePokemon.setCurrentIndex(i)
-            for j in range(0,len(self.dataids)):
-                self.chooseForm.setCurrentIndex(j)
-                for k in range(0,8):
-                    if self.hmlist[k].isChecked():
-                        ts<<"("<<i<<","<<j<<","<<k+1<<"),\n"
-                if i%50 == 0:
-                    print i
-                if i==493:
-                    print "done"
-        sf.close()
-        #Begin Platinum Tutor Moves
-        """tutorMoves=(0x123, 0xBD, 0xD2, 0xC4, 0xCD, 0x09, 0x07, 0x114, 0x8, 0x1BA, 0x191, 0x1D2, 0x17C, 0xAD, 0xB4, 0x13A, 0x10E, 0x11B, 0xC8, 0xF6, 0xEB, 0x144, 0x1AC, 0x19A, 0x19E, 0x1B9, 0xEF, 0x192, 0x14E, 0x189, 0x183, 0x154, 0x10F, 0x101, 0x11A, 0x185, 0x81, 0xFD)
-        sf=QFile("pltutmvs.sql")
-        sf.open(QIODevice.WriteOnly)
-        ts=QTextStream(sf)
-        ts.setCodec("UTF-8")
-        arm9filename=mw.rom.getFolder()+"/overlay/overlay_0005.bin"
-        mfh=QFile(arm9filename)
-        mfh.open(QIODevice.ReadOnly)
-        mds=QDataStream(mfh)
-        mds.setByteOrder(QDataStream.LittleEndian)
-        ts<<"DROP TABLE IF EXISTS `tutormvspl`;\n"
-        ts<<"CREATE TABLE IF NOT EXISTS `tutormvspl` (\n"
-        ts<<"  `dataid` SMALLINT UNSIGNED,\n"
-        ts<<"  `form` SMALLINT UNSIGNED,\n"
-        ts<<") ENGINE=MyISAM  DEFAULT CHARSET=utf8;\n\n"
-
-        #Begin Inserting
-        ts<<"INSERT INTO `tutormvspl` (`natid`,`form`, `hm`) VALUES\n"
-        for i in range (1,494):
-            self.choosePokemon.setCurrentIndex(i)
-            for j in range(0,len(self.dataids)):
-                self.chooseForm.setCurrentIndex(j)
-                tutorMvs=[]
-                num=self.getOffset(i,j)
-                mfh.seek(num+0x3012C)
-                tempnum=mds.readUInt32()
-                tempnum2=mds.readUInt16()
-                for l in range (0,32):
-                    if (tempnum>>l)&1==1:
-                        tutorMvs.append(tutorMoves[l])
-                for l in range (0,6):
-                    if (tempnum2>>l)&1==1:
-                        tutorMvs.append(tutorMoves[32+l])
-                for k in range(0,len(tutorMvs)):
-                    ts<<"("<<i<<","<<j<<","<<tutorMvs[k]<<"),\n"
-        mfh.close()
-        sf.close()"""
-        """sf=QFile("evodex.sql")
-        sf.open(QIODevice.WriteOnly)
-        ts=QTextStream(sf)
-        ts.setCodec("UTF-8")
-        ts<<"DROP TABLE IF EXISTS `data`;\n"
-        ts<<"CREATE TABLE IF NOT EXISTS `evo` (\n"
-        ts<<"  `dataid` SMALLINT,\n"
-        ts<<"  `evotype` SMALLINT,\n"
-        ts<<"  `evotext` TEXT,\n"
-        ts<<"  `evoparam` SMALLINT,\n"
-        ts<<"  `evopkm` SMALLINT,\n"
-        ts<<") ENGINE=MyISAM  DEFAULT CHARSET=utf8;\n\n"
-
-        #Begin Inserting Data
-        ts<<"INSERT INTO `evo` (`evotype`,`evotext`,`evoparam`,`evopkm`) VALUES\n"
-        for i in range (1,494):\
-            self.choosePokemon.setCurrentIndex(i)
-            for j in range(0,len(self.dataids)):
-                self.chooseForm.setCurrentIndex(j)
-                for k in range(0,7):
-                    if self.evotypes[k].currentIndex()!=0:
-                        ts<<"("<<self.dataids[j]<<","
-                        ts<<self.evotypes[k].currentIndex()<<",'"
-                        ts<<self.evotypes[k].currentText()<<"',"
-                        ts<<self.evoparams[k]<<","
-                        ts<<self.evopkms[k].currentIndex()<<"),\n"
-                if i%50 == 0:
-                    print i
-
-        sf.close()
-        """
     def getOffset(self, natid,form):
         r0=form
         r4=natid
@@ -1521,7 +1191,6 @@ class MapDlg(QDialog, ui_ppremapedit.Ui_mapDlg):
         self.mapTab.setCurrentIndex(3)
         del(self.variableTab)
         self.loading=False
-        #self.extractToSql()
 
     def updateIndex(self, n):
         if not self.loading:
@@ -2427,124 +2096,6 @@ class MapDlg(QDialog, ui_ppremapedit.Ui_mapDlg):
         self.superRodPoke3.addItems(self.pN)
         self.superRodPoke4.addItems(self.pN)
         self.superRodPoke5.addItems(self.pN)
-    def extractToSql(self):
-        lT="loc"
-        iL=""
-        if mw.ID==0x4C50:
-            iL+="pl"
-        elif mw.ID==0x50:
-            iL+="p"
-        elif mw.ID==0x44:
-            iL+="d"
-        iL+=chr(mw.lang).lower()
-        lT+=iL
-        sf=QFile(lT+".sql")
-        sf.open(QIODevice.WriteOnly)
-        ts=QTextStream(sf)
-        ts.setCodec("UTF-8")
-        ts<<"DROP TABLE IF EXISTS `"+lT+"`;\n"
-        ts<<"CREATE TABLE IF NOT EXISTS `"+lT+"` (\n"
-        ts<<"  `mapid` SMALLINT,\n"
-        ts<<"  `mapname` TEXT,\n"
-        ts<<"  PRIMARY KEY  (`mapid`)\n"
-        ts<<") ENGINE=MyISAM  DEFAULT CHARSET=utf8;\n\n"
-        ts<<"INSERT INTO `"+lT+"` (`mapid`,`mapname`) VALUES\n"
-        ef=QFile("enc"+iL+".sql")
-        ef.open(QIODevice.WriteOnly)
-        ets=QTextStream(ef)
-        ets.setCodec("UTF-8")
-        ets<<"DROP TABLE IF EXISTS `enc"+iL+"`;\n"
-        ets<<"CREATE TABLE IF NOT EXISTS `enc"+iL+"` (\n"
-        ets<<"  `mapid` SMALLINT,\n"
-        ets<<"  `natid` SMALLINT,\n"
-        ets<<"  `raritytype` TINYINT,\n"
-        ets<<"  `type` TINYINT, \n"
-        ets<<"  `lvl1` TINYINT,\n"
-        ets<<"  `lvl2` TINYINT\n"
-        ets<<") ENGINE=MyISAM  DEFAULT CHARSET=utf8;\n\n"
-        ets<<"INSERT INTO `enc"+iL+"` (`mapid`,`natid`,`raritytype`,`type`,`lvl1`,`lvl2`) VALUES\n"
-
-        for i in range(0, self.size):
-            self.chooseMap.setCurrentIndex(i)
-            ts<<"("+str(i)+",'"+self.chooseMapName.currentText()+"'),\n"
-            if self.spinBox_8.value()!=0xFFFF:
-                if self.walkRate.value()!=0:
-                    ets<<"("+str(i)+","+str(self.chooseWalkPoke1.currentIndex())+",1,1,"+str(self.walkPokeLvl1.value())+",0),\n"
-                    ets<<"("+str(i)+","+str(self.chooseWalkPoke2.currentIndex())+",2,1,"+str(self.walkPokeLvl2.value())+",0),\n"
-                    ets<<"("+str(i)+","+str(self.chooseWalkPoke3.currentIndex())+",3,1,"+str(self.walkPokeLvl3.value())+",0),\n"
-                    ets<<"("+str(i)+","+str(self.chooseWalkPoke4.currentIndex())+",4,1,"+str(self.walkPokeLvl4.value())+",0),\n"
-                    ets<<"("+str(i)+","+str(self.chooseWalkPoke5.currentIndex())+",5,1,"+str(self.walkPokeLvl5.value())+",0),\n"
-                    ets<<"("+str(i)+","+str(self.chooseWalkPoke6.currentIndex())+",6,1,"+str(self.walkPokeLvl6.value())+",0),\n"
-                    ets<<"("+str(i)+","+str(self.chooseWalkPoke7.currentIndex())+",7,1,"+str(self.walkPokeLvl7.value())+",0),\n"
-                    ets<<"("+str(i)+","+str(self.chooseWalkPoke8.currentIndex())+",8,1,"+str(self.walkPokeLvl8.value())+",0),\n"
-                    ets<<"("+str(i)+","+str(self.chooseWalkPoke9.currentIndex())+",9,1,"+str(self.walkPokeLvl9.value())+",0),\n"
-                    ets<<"("+str(i)+","+str(self.chooseWalkPoke10.currentIndex())+",10,1,"+str(self.walkPokeLvl10.value())+",0),\n"
-                    ets<<"("+str(i)+","+str(self.chooseWalkPoke11.currentIndex())+",11,1,"+str(self.walkPokeLvl11.value())+",0),\n"
-                    ets<<"("+str(i)+","+str(self.chooseWalkPoke12.currentIndex())+",12,1,"+str(self.walkPokeLvl12.value())+",0),\n"
-                    if self.morning1.currentIndex() !=self.chooseWalkPoke1.currentIndex():
-                        ets<<"("+str(i)+","+str(self.morning1.currentIndex())+",1,2,"+str(self.walkPokeLvl1.value())+",0),\n"
-                    if self.morning2.currentIndex() !=self.chooseWalkPoke2.currentIndex():
-                        ets<<"("+str(i)+","+str(self.morning2.currentIndex())+",2,2,"+str(self.walkPokeLvl2.value())+",0),\n"
-                    if self.day1.currentIndex() !=self.chooseWalkPoke3.currentIndex():
-                        ets<<"("+str(i)+","+str(self.day1.currentIndex())+",3,3,"+str(self.walkPokeLvl3.value())+",0),\n"
-                    if self.day2.currentIndex() !=self.chooseWalkPoke4.currentIndex():
-                        ets<<"("+str(i)+","+str(self.day2.currentIndex())+",4,3,"+str(self.walkPokeLvl4.value())+",0),\n"
-                    if self.night1.currentIndex() !=self.chooseWalkPoke3.currentIndex():
-                        ets<<"("+str(i)+","+str(self.night1.currentIndex())+",3,4,"+str(self.walkPokeLvl3.value())+",0),\n"
-                    if self.night2.currentIndex() !=self.chooseWalkPoke4.currentIndex():
-                        ets<<"("+str(i)+","+str(self.night2.currentIndex())+",4,4,"+str(self.walkPokeLvl4.value())+",0),\n"
-                    if self.radar1.currentIndex() !=self.chooseWalkPoke7.currentIndex():
-                        ets<<"("+str(i)+","+str(self.radar1.currentIndex())+",7,5,"+str(self.walkPokeLvl7.value())+",0),\n"
-                    if self.radar2.currentIndex() !=self.chooseWalkPoke8.currentIndex():
-                        ets<<"("+str(i)+","+str(self.radar2.currentIndex())+",8,5,"+str(self.walkPokeLvl8.value())+",0),\n"
-                    if self.radar3.currentIndex() !=self.chooseWalkPoke11.currentIndex():
-                        ets<<"("+str(i)+","+str(self.radar3.currentIndex())+",11,5,"+str(self.walkPokeLvl11.value())+",0),\n"
-                    if self.radar4.currentIndex() !=self.chooseWalkPoke12.currentIndex():
-                        ets<<"("+str(i)+","+str(self.radar4.currentIndex())+",12,5,"+str(self.walkPokeLvl12.value())+",0),\n"
-                    if self.ruby1.currentIndex() !=self.chooseWalkPoke9.currentIndex():
-                        ets<<"("+str(i)+","+str(self.ruby1.currentIndex())+",9,6,"+str(self.walkPokeLvl9.value())+",0),\n"
-                    if self.ruby2.currentIndex() !=self.chooseWalkPoke10.currentIndex():
-                        ets<<"("+str(i)+","+str(self.ruby2.currentIndex())+",10,6,"+str(self.walkPokeLvl10.value())+",0),\n"
-                    if self.sapphire1.currentIndex() !=self.chooseWalkPoke9.currentIndex():
-                        ets<<"("+str(i)+","+str(self.sapphire1.currentIndex())+",9,7,"+str(self.walkPokeLvl9.value())+",0),\n"
-                    if self.sapphire2.currentIndex() !=self.chooseWalkPoke10.currentIndex():
-                        ets<<"("+str(i)+","+str(self.sapphire2.currentIndex())+",10,7,"+str(self.walkPokeLvl10.value())+",0),\n"
-                    if self.emerald1.currentIndex() !=self.chooseWalkPoke9.currentIndex():
-                        ets<<"("+str(i)+","+str(self.emerald1.currentIndex())+",9,8,"+str(self.walkPokeLvl9.value())+",0),\n"
-                    if self.emerald2.currentIndex() !=self.chooseWalkPoke10.currentIndex():
-                        ets<<"("+str(i)+","+str(self.emerald2.currentIndex())+",10,8,"+str(self.walkPokeLvl10.value())+",0),\n"
-                    if self.red1.currentIndex() !=self.chooseWalkPoke9.currentIndex():
-                        ets<<"("+str(i)+","+str(self.red1.currentIndex())+",9,9,"+str(self.walkPokeLvl9.value())+",0),\n"
-                    if self.red2.currentIndex() !=self.chooseWalkPoke10.currentIndex():
-                        ets<<"("+str(i)+","+str(self.red2.currentIndex())+",10,9,"+str(self.walkPokeLvl10.value())+",0),\n"
-                    if self.green1.currentIndex() !=self.chooseWalkPoke9.currentIndex():
-                        ets<<"("+str(i)+","+str(self.green1.currentIndex())+",9,10,"+str(self.walkPokeLvl9.value())+",0),\n"
-                    if self.green2.currentIndex() !=self.chooseWalkPoke10.currentIndex():
-                        ets<<"("+str(i)+","+str(self.green2.currentIndex())+",10,10,"+str(self.walkPokeLvl10.value())+",0),\n"
-                if self.surfRate.value() !=0:
-                    ets<<"("+str(i)+","+str(self.surfPoke1.currentIndex())+",1,13,"+str(self.surfMin1.value())+","+str(self.surfMax1.value())+"),\n"
-                    ets<<"("+str(i)+","+str(self.surfPoke2.currentIndex())+",2,13,"+str(self.surfMin2.value())+","+str(self.surfMax2.value())+"),\n"
-                    ets<<"("+str(i)+","+str(self.surfPoke3.currentIndex())+",3,13,"+str(self.surfMin3.value())+","+str(self.surfMax3.value())+"),\n"
-                    ets<<"("+str(i)+","+str(self.surfPoke4.currentIndex())+",4,13,"+str(self.surfMin4.value())+","+str(self.surfMax4.value())+"),\n"
-                    ets<<"("+str(i)+","+str(self.surfPoke5.currentIndex())+",5,13,"+str(self.surfMin5.value())+","+str(self.surfMax5.value())+"),\n"
-                if self.oldRodRate.value() !=0:
-                    ets<<"("+str(i)+","+str(self.oldRodPoke1.currentIndex())+",1,14,"+str(self.oldRodMin1.value())+","+str(self.oldRodMax1.value())+"),\n"
-                    ets<<"("+str(i)+","+str(self.oldRodPoke2.currentIndex())+",2,14,"+str(self.oldRodMin2.value())+","+str(self.oldRodMax2.value())+"),\n"
-                    ets<<"("+str(i)+","+str(self.oldRodPoke3.currentIndex())+",3,14,"+str(self.oldRodMin3.value())+","+str(self.oldRodMax3.value())+"),\n"
-                    ets<<"("+str(i)+","+str(self.oldRodPoke4.currentIndex())+",4,14,"+str(self.oldRodMin4.value())+","+str(self.oldRodMax4.value())+"),\n"
-                    ets<<"("+str(i)+","+str(self.oldRodPoke5.currentIndex())+",5,14,"+str(self.oldRodMin5.value())+","+str(self.oldRodMax5.value())+"),\n"
-                if self.goodRodRate.value() !=0:
-                    ets<<"("+str(i)+","+str(self.goodRodPoke1.currentIndex())+",1,15,"+str(self.goodRodMin1.value())+","+str(self.goodRodMax1.value())+"),\n"
-                    ets<<"("+str(i)+","+str(self.goodRodPoke2.currentIndex())+",2,15,"+str(self.goodRodMin2.value())+","+str(self.goodRodMax2.value())+"),\n"
-                    ets<<"("+str(i)+","+str(self.goodRodPoke3.currentIndex())+",3,15,"+str(self.goodRodMin3.value())+","+str(self.goodRodMax3.value())+"),\n"
-                    ets<<"("+str(i)+","+str(self.goodRodPoke4.currentIndex())+",4,15,"+str(self.goodRodMin4.value())+","+str(self.goodRodMax4.value())+"),\n"
-                    ets<<"("+str(i)+","+str(self.goodRodPoke5.currentIndex())+",5,15,"+str(self.goodRodMin5.value())+","+str(self.goodRodMax5.value())+"),\n"
-                if self.superRodRate.value() !=0:
-                    ets<<"("+str(i)+","+str(self.superRodPoke1.currentIndex())+",1,16,"+str(self.superRodMin1.value())+","+str(self.superRodMax1.value())+"),\n"
-                    ets<<"("+str(i)+","+str(self.superRodPoke2.currentIndex())+",2,16,"+str(self.superRodMin2.value())+","+str(self.superRodMax2.value())+"),\n"
-                    ets<<"("+str(i)+","+str(self.superRodPoke3.currentIndex())+",3,16,"+str(self.superRodMin3.value())+","+str(self.superRodMax3.value())+"),\n"
-                    ets<<"("+str(i)+","+str(self.superRodPoke4.currentIndex())+",4,16,"+str(self.superRodMin4.value())+","+str(self.superRodMax4.value())+"),\n"
-                    ets<<"("+str(i)+","+str(self.superRodPoke5.currentIndex())+",5,16,"+str(self.superRodMin5.value())+","+str(self.superRodMax5.value())+"),\n"
 class TmHmDlg(QDialog, ui_ppretmhmedit.Ui_TmHmEditDlg):
     def __init__(self,parent=None):
         super(TmHmDlg,self).__init__(parent)
@@ -2558,7 +2109,6 @@ class TmHmDlg(QDialog, ui_ppretmhmedit.Ui_TmHmEditDlg):
         self.chooseMove.addItems(binary.strlist)
         self.chooseTm.setCurrentIndex(1)
         self.chooseTm.setCurrentIndex(0)
-        #self.extractToSql()
     def changedTm(self,event):
         num=self.chooseTm.currentIndex()
         num=0xF0BFC+num*0x2
@@ -2571,28 +2121,6 @@ class TmHmDlg(QDialog, ui_ppretmhmedit.Ui_TmHmEditDlg):
         movenum=ds.readUInt16()
         fh.close()
         self.chooseMove.setCurrentIndex(movenum)
-    def extractToSql(self):
-        sf=QFile("tmdex.sql")
-        sf.open(QIODevice.WriteOnly)
-        ts=QTextStream(sf)
-        ts.setCodec("UTF-8")
-        ts<<"DROP TABLE IF EXISTS `tms`;\n"
-        ts<<"CREATE TABLE IF NOT EXISTS `tms` (\n"
-        ts<<"  `tmnum` TINYINT,"
-        ts<<"  `movenum` SMALLINT,"
-        ts<<"  PRIMARY KEY  (`tmnum`)\n"
-        ts<<") ENGINE=MyISAM  DEFAULT CHARSET=utf8;\n\n"
-
-        #Begin Inserting Data
-        ts<<"INSERT INTO `tms` (`tmnum`,`movenum`) VALUES\n"
-        for i in range (0,100):
-            self.chooseTm.setCurrentIndex(i)
-            ts<<"("<<i<<","<<self.chooseMove.currentIndex()<<")"
-            if i==99:
-                ts<<";"
-                print "done"
-            else:
-                ts<<",\n"
 class MoveDlg(QDialog, ui_ppremoveedit.Ui_MoveEditDlg):
     def __init__(self,parent=None):
         super(MoveDlg,self).__init__(parent)
@@ -2638,7 +2166,6 @@ class MoveDlg(QDialog, ui_ppremoveedit.Ui_MoveEditDlg):
         for i in range (0,0x120):
             self.effect.addItem(unicode(i))
         self.cpower=(0,2,2,8,2,3,1,2,0,0,2,0,0,2,2,2,0,2,2,2,1,0,2,1)
-        #self.extractToSql()
     def moveChanged(self):
         if mw.ID==0x4C50:
             if mw.lang==0x4A:
@@ -2685,47 +2212,6 @@ class MoveDlg(QDialog, ui_ppremoveedit.Ui_MoveEditDlg):
                 num=i+1
         self.target.setCurrentIndex(num)
         self.unk1.setValue(ord(file[11]))
-    def extractToSql(self):
-        sf=QFile("movedexdpkr.sql")
-        sf.open(QIODevice.WriteOnly)
-        ts=QTextStream(sf)
-        ts.setCodec("UTF-8")
-        ts<<"DROP TABLE IF EXISTS `moveskr`;\n"
-        ts<<"CREATE TABLE IF NOT EXISTS `moveskr` (\n"
-        ts<<"  `moveid` SMALLINT,\n"
-        ts<<"  `name` VARCHAR(20),\n"
-        ts<<"  `power` SMALLINT,\n"
-        ts<<"  `pp` TINYINT,\n"
-        ts<<"  `type` TINYINT,\n"
-        ts<<"  `acc` SMALLINT,\n"
-        ts<<"  `target` TINYINT,\n"
-        ts<<"  `effectchance` SMALLINT,\n"
-        ts<<"  `category` TINYINT,\n"
-        ts<<"  `ctype` TINYINT,\n"
-        ts<<"  `cpoints` TINYINT,\n"
-        ts<<"  `desc` TEXT,\n"
-        ts<<"  `cdesc` TEXT,\n"
-        ts<<"  `effect` SMALLINT,\n"
-        ts<<"  PRIMARY KEY  (`moveid`)\n"
-        ts<<") ENGINE=MyISAM  DEFAULT CHARSET=utf8;\n\n"
-
-        #Begin Inserting Data
-        ts<<"INSERT INTO `moveskr` (`moveid`,`name`,`power`,`pp`,`type`,`acc`,`target`,`effectchance`,`category`,`ctype`,`cpoints`,`desc`,`cdesc`,`effect`) VALUES\n"
-        for i in range (1,468):
-            self.chooseMove.setCurrentIndex(i)
-            ts<<"("<<i<<",'"<<self.chooseMove.currentText()<<"',"
-            ts<<self.basePower.value()<<","<<self.pp.value()<<","
-            ts<<self.type.currentIndex()<<","<<self.accuracy.value()<<","
-            ts<<"'"<<self.target.currentIndex()<<"',"<<self.effectChance.value()<<","
-            ts<<self.category.currentIndex()<<","<<self.ctype.currentIndex()<<","
-            ts<<self.cpower[self.cindex]<<",'"<<self.atkDesc.toPlainText().replace("\\n"," ").replace("\\x0001", " ")<<"','"
-            ts<<self.catkDesc.toPlainText().replace("\\n"," ").replace("\\x0001", " ")<<"',"
-            ts<<self.effect.currentIndex()<<")"
-            if i==467:
-                ts<<";"
-                print "done"
-            else:
-                ts<<",\n"
 class ItemDlg(QDialog, ui_ppreitemedit.Ui_ItemEditDlg):
     def __init__(self,parent=None):
         super(ItemDlg,self).__init__(parent)
@@ -2745,29 +2231,6 @@ class ItemDlg(QDialog, ui_ppreitemedit.Ui_ItemEditDlg):
                 binary=poketext.PokeTextData(self.archive.gmif.files[344])
         binary.decrypt()
         self.chooseItem.addItems(binary.strlist)
-        #self.extractToSql()
-    def extractToSql(self):
-        sf=QFile("itemdexkr.sql")
-        sf.open(QIODevice.WriteOnly)
-        ts=QTextStream(sf)
-        ts.setCodec("UTF-8")
-        ts<<"DROP TABLE IF EXISTS `itemskr`;\n"
-        ts<<"CREATE TABLE IF NOT EXISTS `itemskr` (\n"
-        ts<<"  `itemid` SMALLINT,"
-        ts<<"  `name` VARCHAR(30),"
-        ts<<"  PRIMARY KEY  (`itemid`)\n"
-        ts<<") ENGINE=MyISAM  DEFAULT CHARSET=utf8;\n\n"
-
-        #Begin Inserting Data
-        ts<<"INSERT INTO `itemskr` (`itemid`,`name`) VALUES\n"
-        for i in range (0,465):
-            self.chooseItem.setCurrentIndex(i)
-            ts<<"("<<i<<",'"<<self.chooseItem.currentText()<<"')"
-            if i==464:
-                ts<<";"
-                print "done"
-            else:
-                ts<<",\n"
 class AbilityDlg(QDialog, ui_ppreabilityedit.Ui_AbilityEditDlg):
     def __init__(self,parent=None):
         super(AbilityDlg,self).__init__(parent)
@@ -2785,41 +2248,6 @@ class AbilityDlg(QDialog, ui_ppreabilityedit.Ui_AbilityEditDlg):
                 binary=poketext.PokeTextData(self.archive.gmif.files[552])
         binary.decrypt()
         self.chooseAbility.addItems(binary.strlist)
-        #self.extractToSql()
-    def extractToSql(self):
-        if mw.ID==0x4C50:
-            if mw.lang==0x4A:
-                binary=poketext.PokeTextData(self.archive.gmif.files[605])
-            else:
-                binary=poketext.PokeTextData(self.archive.gmif.files[612])
-        else:
-            if mw.lang==0x4B:
-                binary=poketext.PokeTextData(self.archive.gmif.files[547])
-            else:
-                binary=poketext.PokeTextData(self.archive.gmif.files[554])
-        binary.decrypt()
-        sf=QFile("abilitydexkr.sql")
-        sf.open(QIODevice.WriteOnly)
-        ts=QTextStream(sf)
-        ts.setCodec("UTF-8")
-        ts<<"DROP TABLE IF EXISTS `abilitieskr`;\n"
-        ts<<"CREATE TABLE IF NOT EXISTS `abilitieskr` (\n"
-        ts<<"  `id` SMALLINT,\n"
-        ts<<"  `name` VARCHAR(30),\n"
-        ts<<"  `desc` TEXT,\n"
-        ts<<"  PRIMARY KEY  (`id`)\n"
-        ts<<") ENGINE=MyISAM  DEFAULT CHARSET=utf8;\n\n"
-
-        #Begin Inserting Data
-        ts<<"INSERT INTO `abilitieskr` (`id`,`name`,`desc`) VALUES\n"
-        for i in range (0,124):
-            self.chooseAbility.setCurrentIndex(i)
-            ts<<"("<<i<<",'"<<self.chooseAbility.currentText()<<"','"<<binary.strlist[i].replace("\\n"," ").replace("\\x0001", " ")<<"')"
-            if i==123:
-                ts<<";"
-                print "done"
-            else:
-                ts<<",\n"
 class ScriptDlg(QDialog, ui_pprescripts.Ui_scriptDlg):
     def __init__(self,parent=None):
         super(ScriptDlg,self).__init__(parent)
@@ -2876,7 +2304,6 @@ class TrainerEditDlg(QDialog, ui_ppretredit.Ui_TrainerEditDlg):
         QtCore.QObject.connect(self.attackBool, QtCore.SIGNAL("clicked()"), self.changedTrType)
         QtCore.QMetaObject.connectSlotsByName(self)
         self.adjustPokes(0)
-        #self.extractToSql()
     def changedTrType(self):
         iBool = self.itemBool.isChecked()
         aBool = self.attackBool.isChecked()
@@ -3122,80 +2549,6 @@ class TrainerEditDlg(QDialog, ui_ppretredit.Ui_TrainerEditDlg):
         self.msgNarc.replaceFile(mw.TN[12], encrypt.getStr())
         WriteMsgNarc(self.msgNarc)
         print "Wrote Trainer Name to Text NARC successfully!"#"""
-    def extractToSql(self):
-        iL=""
-        if mw.ID==0x5353:
-            iL+="hgss"
-        elif mw.ID==0x4748:
-            iL+="hgss"
-        elif mw.ID==0x4C50:
-            iL+="pl"
-        elif mw.ID==0x50:
-            iL+="dp"
-        elif mw.ID==0x44:
-            iL+="dp"
-        lL=chr(mw.lang).lower()
-        sf=QFile(iL+"trainers"+lL+".sql")
-        sf.open(QIODevice.WriteOnly)
-        ts=QTextStream(sf)
-        ts.setCodec("UTF-8")
-        ts<<"DROP TABLE IF EXISTS `"+iL+"trainers"+lL+"`;\n"
-        ts<<"CREATE TABLE IF NOT EXISTS `"+iL+"trainers"+lL+"` (\n"
-        ts<<"  `id` SMALLINT,\n"
-        ts<<"  `name` VARCHAR(32),\n"
-        ts<<"  `class` VARCHAR(32),\n"
-        ts<<"  `classid` SMALLINT,\n"
-        ts<<"  `num_pokemon` SMALLINT,\n"
-        ts<<"  `items` TEXT,\n"
-        ts<<"  `flag` SMALLINT,\n"
-        ts<<"  `double` TINYINT,\n"
-        ts<<"  PRIMARY KEY  (`id`)\n"
-        ts<<") ENGINE=MyISAM  DEFAULT CHARSET=utf8;\n\n"
-
-        #Begin Inserting Data
-        ts<<"INSERT INTO `"+iL+"trainers"+lL+"` (`id`,`name`,`class`,`classid`,`num_pokemon`,`items`,`flag`,`double`) VALUES\n"
-
-        sg=QFile(iL+"trpoke"+lL+".sql")
-        sg.open(QIODevice.WriteOnly)
-        tt=QTextStream(sg)
-        tt.setCodec("UTF-8")
-        tt<<"DROP TABLE IF EXISTS `"+iL+"trpoke"+lL+"`;\n"
-        tt<<"CREATE TABLE IF NOT EXISTS `"+iL+"trpoke"+lL+"` (\n"
-        tt<<"  `id` SMALLINT,\n"
-        tt<<"  `trainerid` SMALLINT,\n"
-        tt<<"  `natid` INT,\n"
-        tt<<"  `form` SMALLINT,\n"
-        tt<<"  `level` INT,\n"
-        tt<<"  `item` TEXT,\n"
-        tt<<"  `moves` TEXT,\n"
-        tt<<"  PRIMARY KEY  (`id`)\n"
-        tt<<") ENGINE=MyISAM  DEFAULT CHARSET=utf8;\n\n"
-
-        #Begin Inserting Data
-        tt<<"INSERT INTO `"+iL+"trpoke"+lL+"` (`id`,`trainerid`,`natid`,`form`,`level`,`item`,`moves`) VALUES\n"
-        k = 0
-        for i in range (0,len(self.trNames.strlist)):
-            self.chooseTrainer.setCurrentIndex(i)
-            ts<<"("<<i<<",'"<<self.trNames.strlist[i]<<"','"<<self.class_2.currentText()<<"','"<<str(self.class_2.currentIndex())<<"','"<<self.pokenum.value()<<"','"<<(str(self.item1.currentIndex())+","+str(self.item2.currentIndex())+","+str(self.item3.currentIndex())+","+str(self.item4.currentIndex()))<<"','"<<(self.itemBool.isChecked()*2 + self.attackBool.isChecked())<<"','"<<self.doubleBool.isChecked()<<"')"
-            for h in range(0,self.pokenum.value()):
-                tt<<"("<<k<<","<<i<<",'"
-                k+=1
-                tt<<eval("self.spec"+str(h)+".currentIndex()")<<"','"
-                tt<<eval("self.form_"+str(h)+".value()")<<"','"
-                tt<<eval("self.pokelvl"+str(h)+".value()")<<"','"
-                tt<<eval("self.pokeItem"+str(h)+".currentIndex()")<<"','"
-                tt<<""<<eval("self.attack"+str(h)+"_1.currentIndex()")<<""
-                tt<<","<<eval("self.attack"+str(h)+"_2.currentIndex()")<<""
-                tt<<","<<eval("self.attack"+str(h)+"_3.currentIndex()")<<""
-                tt<<","<<eval("self.attack"+str(h)+"_4.currentIndex()")<<""
-                tt<<"')"
-                tt<<",\n"
-            if i==len(self.trNames.strlist)-1:
-                ts<<";"
-                tt<<";"
-                print "--done--"
-            else:
-                ts<<",\n"
 class LoadDlg(QDialog, ui_open.Ui_Dialog):
     def __init__(self,parent=None):
         super(LoadDlg,self).__init__(parent)
