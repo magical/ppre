@@ -52,7 +52,7 @@ Sins commited by PPRE:
 
        Another is to fork ndstool.
 
-    * Does not separate logic and presentation.
+    * Does not separate presentation logic and application logic
 
        The code for parsing the games' data structures is right there in
        the GUI code.
