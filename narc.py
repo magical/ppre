@@ -6,7 +6,7 @@ from array import *
 
 class BTAF:
     def __init__(self, rawdata):
-        if len(rawdata)>0:           
+        if len(rawdata)>0:
             self.magic = rawdata[:4]
             self.header = unpack("II", rawdata[4:12])
             if self.magic != "BTAF":
@@ -14,12 +14,12 @@ class BTAF:
         else:
             self.magic = "BTAF"
             self.header = (12, 0)
-            
+
         self.table = []
         rawdata=rawdata[12:]
         if len(rawdata)>0:
-            for i in range(self.getEntryNum()):            
-                self.table.append(unpack("II", rawdata[i*8:i*8+8]))      
+            for i in range(self.getEntryNum()):
+                self.table.append(unpack("II", rawdata[i*8:i*8+8]))
     def getSize(self):
         return self.header[0]
     def getEntryNum(self):
@@ -27,20 +27,20 @@ class BTAF:
     def ToFile(self, f, t):
         f.write(self.magic)
         f.write(pack("II", self.header[0],self.header[1]))
-        
-        for pair in t:            
+
+        for pair in t:
             f.write(pack("II", pair[0], pair[1]))
     def addFile(self):
         s, e=self.header
         s += 8
         e += 1
         self.header=s, e
-        
-               
-    
- 
-    
-    
+
+
+
+
+
+
 class BTNF:
     def __init__(self, rawdata):
         if len(rawdata)>0:
@@ -54,19 +54,19 @@ class BTNF:
     def ToFile(self, f):
         f.write(self.magic)
         f.write(pack("IIHH", self.header[0],self.header[1],self.header[2],self.header[3]))
-        
-    
-            
-        
 
- 
+
+
+
+
+
 class GMIF:
     def __init__(self, rawdata, t):
         if len(rawdata)>0:
             self.magic = rawdata[:4]
             self.size = unpack("I", rawdata[4:8])[0]
             if self.magic != "GMIF":
-                raise NameError, "GMIF tag not found"         
+                raise NameError, "GMIF tag not found"
         else:
             self.magic = "GMIF"
             self.size = 8
@@ -74,7 +74,7 @@ class GMIF:
         self.files = []
         for ofs in t:
             self.files.append(rawdata[8+ofs[0]:8+ofs[1]])
-            
+
     def appendFile(raw):
         data += raw
         self.header.size += len(raw)
@@ -82,10 +82,10 @@ class GMIF:
         f.write(self.magic)
         f.write(pack("I", self.size))
         for d in self.files:
-            f.write(d)            
+            f.write(d)
     def addFile(self, data, size):
         self.files.append(data)
-        self.size += size        
+        self.size += size
     def buildIndex(self):
         index = []
         c = 0
@@ -94,11 +94,11 @@ class GMIF:
             index.append((c, c+l))
             c=c+l
         return index
-    
 
-        
-    
-        
+
+
+
+
 
 class NARC:
     def __init__(self, rawdata):
@@ -112,7 +112,7 @@ class NARC:
             self.magic = "NARC"
             self.header = (0x0100FFFE, 0x10+12+8 + 0x10, 0x10, 3)
 
-            
+
         rawdata= rawdata[16:]
         self.btaf = BTAF(rawdata)
         rawdata= rawdata[self.btaf.getSize():]
