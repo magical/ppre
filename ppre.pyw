@@ -123,25 +123,25 @@ class MainWindow(QMainWindow, ui_ppremain.Ui_MainWindow):
     def openROM(self):
         if not self.nameEdit.text():
             return romerror.noROM()
-        self.rom = execute.NDSFILES(unicode(self.nameEdit.text()))
-        self.rom.dump()
+        self.rom = roms.ROM(unicode(self.nameEdit.text()))
         try:
-            self.ID=getROMID()
+            self.rom._load()
         except IOError:
             romerror.noData(self)
             del(self.rom)
-            return
-        self.lang = getLang()
-        self.other=("Pokemon Center", "Mart", "GYM")
-        self.rominfo = roms.getInfo(self.ID, self.lang)
+            raise
+
+        self.other = ("Pokemon Center", "Mart", "GYM")
 
         # Backward compatibility
-        self.romname = self.rominfo.romname
-        self.Of = self.rominfo.offsets
-        self.TN = self.rominfo.textnums
-        self.DT = {"type": self.rominfo.textnums.types,
-                   "move": self.rominfo.textnums.moves,
-                   "contest": self.rominfo.textnums.contest}
+        self.ID = self.rom.readID()
+        self.lang = self.rom.readLang()
+        self.romname = self.rom.info.romname
+        self.Of = self.rom.info.offsets
+        self.TN = self.rom.info.textnums
+        self.DT = {"type": self.rom.info.textnums.types,
+                   "move": self.rom.info.textnums.moves,
+                   "contest": self.rom.info.textnums.contest}
 
         self.defMNIndex()
         """self.archive = ReadMsgNarc()
@@ -210,40 +210,15 @@ class MainWindow(QMainWindow, ui_ppremain.Ui_MainWindow):
         locationindex.index(self)
     def loadFail(self):
         QMessageBox.critical(self,"Critical","ROM has not been loaded. Please place your ROM in the same folder as PPRE, type in the name of your ROM (with '.nds'), and click 'Open ROM'.")
-def getROMID():
-    # The header starts out with the name of the game, so the ID is actually 
-    # just the two characters after "POKEMON ".
-    if not os.path.isfile(mw.rom.getFolder()+"/header.bin"):
-        raise IOError
-    filename = mw.rom.getFolder()+"/header.bin"
-    fh=QFile(filename)
-    fh.open(QIODevice.ReadOnly)
-    ds=QDataStream(fh)
-    ds.setByteOrder(QDataStream.LittleEndian)
-    fh.seek(8)
-    id=ds.readUInt16()
-    fh.close()
-    return id
-def getLang():
-    # Bytes 12-15 in the header are the serial number of the game, as assigned
-    # by nintendo. The last character seems to indicate the language.
-    filename = mw.rom.getFolder()+"/header.bin"
-    fh=QFile(filename)
-    fh.open(QIODevice.ReadOnly)
-    ds=QDataStream(fh)
-    ds.setByteOrder(QDataStream.LittleEndian)
-    fh.seek(15)
-    id=ds.readUInt16()&0xFF
-    fh.close()
-    return id
+
 def ReadMapName():
-    mapnamefilename=mw.rom.getFolder()+"/root/fielddata/maptable/mapname.bin"
+    mapnamefilename=mw.rom.getFullPath("/root/fielddata/maptable/mapname.bin")
     fh=QFile(mapnamefilename)
     fh.open(QIODevice.ReadOnly)
     size=fh.size()
     size/=0x10
     fh.close()
-    filename = mw.rom.getFolder()+"/root/fielddata/maptable/mapname.bin"
+    filename = mw.rom.getFullPath("/root/fielddata/maptable/mapname.bin")
     codenames=[]
     f = open(filename, "rb")
     for j in range(0, size):
@@ -255,225 +230,37 @@ def ReadMapName():
         codenames.append(name)
     f.close()
     return codenames
-def ReadMsgNarc():
-    #print mw.ID
-    if mw.ID== 0x5353 or mw.ID== 0x4748:
-        filename = mw.rom.getFolder()+"/root/a/0/2/7"
-    elif mw.ID== 0x4C50:
-        filename = mw.rom.getFolder()+"/root/msgdata/pl_msg.narc"
-    else:
-        filename = mw.rom.getFolder()+"/root/msgdata/msg.narc"
-    f = open(filename, "rb")
-    d = f.read()
-    f.close()
-    return narc.NARC(d)
-def ReadPersonalNarc():
-    if mw.ID== 0x5353:
-        filename = mw.rom.getFolder()+"/root/a/0/0/2"
-    elif mw.ID== 0x4748:
-        filename = mw.rom.getFolder()+"/root/a/0/0/2"
-    elif mw.ID== 0x4c50:
-        filename = mw.rom.getFolder()+"/root/poketool/personal/pl_personal.narc"
-    elif mw.ID == 0x44:
-        filename = mw.rom.getFolder()+"/root/poketool/personal/personal.narc"
-    else:
-        filename = mw.rom.getFolder()+"/root/poketool/personal_pearl/personal.narc"
-    f = open(filename, "rb")
-    d = f.read()
-    f.close()
-    return narc.NARC(d)
-def ReadTrNarc():
-    if mw.ID== 0x5353:
-        filename = mw.rom.getFolder()+"/root/a/0/5/5"
-    elif mw.ID== 0x4748:
-        filename = mw.rom.getFolder()+"/root/a/0/5/5"
-    else:
-        filename = mw.rom.getFolder()+"/root/poketool/trainer/trdata.narc"
-    f = open(filename, "rb")
-    d = f.read()
-    f.close()
-    return narc.NARC(d)
-def ReadTrPokeNarc():
-    if mw.ID== 0x5353:
-        filename = mw.rom.getFolder()+"/root/a/0/5/6"
-    elif mw.ID== 0x4748:
-        filename = mw.rom.getFolder()+"/root/a/0/5/6"
-    else:
-        filename = mw.rom.getFolder()+"/root/poketool/trainer/trpoke.narc"
-    f = open(filename, "rb")
-    d = f.read()
-    f.close()
-    return narc.NARC(d)
-def ReadWOTblNarc():
-    if mw.ID== 0x5353:
-        filename = mw.rom.getFolder()+"/root/a/0/3/3"
-    elif mw.ID== 0x4748:
-        filename = mw.rom.getFolder()+"/root/a/0/3/3"
-    else:
-        filename = mw.rom.getFolder()+"/root/poketool/personal/wotbl.narc"
-    f = open(filename, "rb")
-    d = f.read()
-    f.close()
-    return narc.NARC(d)
-def ReadEvoNarc():
-    if mw.ID== 0x5353:
-        filename = mw.rom.getFolder()+"/root/a/0/3/4"
-    elif mw.ID== 0x4748:
-        filename = mw.rom.getFolder()+"/root/a/0/3/4"
-    else:
-        filename = mw.rom.getFolder()+"/root/poketool/personal/evo.narc"
-    f = open(filename, "rb")
-    d = f.read()
-    f.close()
-    return narc.NARC(d)
-def ReadWazaNarc():
-    if mw.ID== 0x5353:
-        filename = mw.rom.getFolder()+"/root/a/0/1/1"
-    elif mw.ID== 0x4748:
-        filename = mw.rom.getFolder()+"/root/a/0/1/1"
-    elif mw.ID==0x4C50:
-        filename = mw.rom.getFolder()+"/root/poketool/waza/pl_waza_tbl.narc"
-    else:
-        filename = mw.rom.getFolder()+"/root/poketool/waza/waza_tbl.narc"
-    f = open(filename, "rb")
-    d = f.read()
-    f.close()
-    return narc.NARC(d)
-def ReadEncNarc():
-    if mw.ID==0x4C50:
-        filename = mw.rom.getFolder()+"/root/fielddata/encountdata/pl_enc_data.narc"
-    elif mw.ID==0x50:
-        filename = mw.rom.getFolder()+"/root/fielddata/encountdata/p_enc_data.narc"
-    elif mw.ID== 0x5353:
-        filename = mw.rom.getFolder()+"/root/a/1/3/6"
-    elif mw.ID== 0x4748:
-        filename = mw.rom.getFolder()+"/root/a/0/3/7"
-    else:
-        filename = mw.rom.getFolder()+"/root/fielddata/encountdata/d_enc_data.narc"
-    f = open(filename, "rb")
-    d = f.read()
-    f.close()
-    return narc.NARC(d)
-def ReadEventNarc():
-    if mw.ID==0x4C50:
-        filename = mw.rom.getFolder()+"/root/fielddata/eventdata/zone_event.narc"
-    elif mw.ID in (0x5353,0x4748):
-        filename = mw.rom.getFolder()+"/root/a/0/3/2"
-    else:
-        filename = mw.rom.getFolder()+"/root/fielddata/eventdata/zone_event_release.narc"
-    f = open(filename, "rb")
-    d = f.read()
-    f.close()
-    return narc.NARC(d)
-def ReadScriptNarc():
-    if mw.ID== 0x5353 or mw.ID==0x4748:
-        filename = mw.rom.getFolder()+"/root/a/0/1/2"
-    elif mw.ID==0x4C50  or mw.lang==0x4A:
-        filename = mw.rom.getFolder()+"/root/fielddata/script/scr_seq.narc"
-    else:
-        filename = mw.rom.getFolder()+"/root/fielddata/script/scr_seq_release.narc"
-    f = open(filename, "rb")
-    d = f.read()
-    f.close()
-    return narc.NARC(d)
-def WriteScriptNarc(archive):
-    if mw.ID== 0x5353 or mw.ID==0x4748:
-        filename = mw.rom.getFolder()+"/root/a/0/1/2"
-    elif mw.ID==0x4C50 or mw.lang==0x4A:
-        filename = mw.rom.getFolder()+"/root/fielddata/script/scr_seq.narc"
-    else:
-        filename = mw.rom.getFolder()+"/root/fielddata/script/scr_seq_release.narc"
-    f = open(filename, "wb")
-    archive.ToFile(f)
-    f.close()
-def WriteEncNarc(archive):
-    if mw.ID==0x4C50:
-        filename = mw.rom.getFolder()+"/root/fielddata/encountdata/pl_enc_data.narc"
-    elif mw.ID==0x50:
-        filename = mw.rom.getFolder()+"/root/fielddata/encountdata/p_enc_data.narc"
-    elif mw.ID== 0x5353:
-        filename = mw.rom.getFolder()+"/root/a/1/3/6"
-    elif mw.ID== 0x4748:
-        filename = mw.rom.getFolder()+"/root/a/0/3/7"
-    else:
-        filename = mw.rom.getFolder()+"/root/fielddata/encountdata/d_enc_data.narc"
-    f = open(filename, "wb")
-    archive.ToFile(f)
-    f.close()
-def WriteEventNarc(archive):
-    if mw.ID==0x4C50:
-        filename = mw.rom.getFolder()+"/root/fielddata/eventdata/zone_event.narc"
-    elif mw.ID in (0x5353,0x4748):
-        filename = mw.rom.getFolder()+"/root/a/0/3/2"
-    else:
-        filename = mw.rom.getFolder()+"/root/fielddata/eventdata/zone_event_release.narc"
-    f = open(filename, "wb")
-    archive.ToFile(f)
-    f.close()
-def WriteWOTblNarc(archive):
-    if mw.ID== 0x5353:
-        filename = mw.rom.getFolder()+"/root/a/0/3/3"
-    elif mw.ID== 0x4748:
-        filename = mw.rom.getFolder()+"/root/a/0/3/3"
-    else:
-        filename = mw.rom.getFolder()+"/root/poketool/personal/wotbl.narc"
-    f = open(filename, "wb")
-    archive.ToFile(f)
-    f.close()
-def WriteMsgNarc(archive):
-    if mw.ID== 0x5353 or mw.ID== 0x4748:
-        filename = mw.rom.getFolder()+"/root/a/0/2/7"
-    elif mw.ID== 0x4C50:
-        filename = mw.rom.getFolder()+"/root/msgdata/pl_msg.narc"
-    else:
-        filename = mw.rom.getFolder()+"/root/msgdata/msg.narc"
-    f = open(filename, "wb")
-    archive.ToFile(f)
-    f.close()
-def WriteTrNarc(archive):
-    if mw.ID== 0x5353:
-        filename = mw.rom.getFolder()+"/root/a/0/5/5"
-    elif mw.ID== 0x4748:
-        filename = mw.rom.getFolder()+"/root/a/0/5/5"
-    else:
-        filename = mw.rom.getFolder()+"/root/poketool/trainer/trdata.narc"
-    f = open(filename, "wb")
-    archive.ToFile(f)
-    f.close()
-def WriteTrPokeNarc(archive):
-    if mw.ID== 0x5353:
-        filename = mw.rom.getFolder()+"/root/a/0/5/6"
-    elif mw.ID== 0x4748:
-        filename = mw.rom.getFolder()+"/root/a/0/5/6"
-    else:
-        filename = mw.rom.getFolder()+"/root/poketool/trainer/trpoke.narc"
-    f = open(filename, "wb")
-    archive.ToFile(f)
-    f.close()
-def WriteEvoNarc(archive):
-    if mw.ID== 0x5353:
-        filename = mw.rom.getFolder()+"/root/a/0/3/4"
-    elif mw.ID== 0x4748:
-        filename = mw.rom.getFolder()+"/root/a/0/3/4"
-    else:
-        filename = mw.rom.getFolder()+"/root/poketool/personal/evo.narc"
-    f = open(filename, "wb")
-    archive.ToFile(f)
-    f.close()
-def WritePersonalNarc(archive):
-    if mw.ID== 0x5353:
-        filename = mw.rom.getFolder()+"/root/a/0/0/2"
-    elif mw.ID== 0x4748:
-        filename = mw.rom.getFolder()+"/root/a/0/0/2"
-    elif mw.ID== 0x4c50:
-        filename = mw.rom.getFolder()+"/root/poketool/personal/pl_personal.narc"
-    elif mw.ID == 0x44:
-        filename = mw.rom.getFolder()+"/root/poketool/personal/personal.narc"
-    else:
-        filename = mw.rom.getFolder()+"/root/poketool/personal_pearl/personal.narc"
-    f = open(filename, "wb")
-    archive.ToFile(f)
-    f.close()
+
+#Backwards compatibility
+def narcreader(path):
+    def inner():
+        return mw.rom.readNarc(path)
+    return inner
+def narcwriter(path):
+    def inner(archive):
+        return mw.rom.writeNarc(path)
+    return inner
+ReadMsgNarc = narcreader("/root/msgdata/msg.narc")
+ReadPersonalNarc = narcreader("/root/poketool/personal/personal.narc")
+ReadTrNarc = narcreader("/root/poketool/trainer/trdata.narc")
+ReadTrPokeNarc = narcreader("/root/poketool/trainer/trpoke.narc")
+ReadWOTblNarc = narcreader("/root/poketool/personal/wotbl.narc")
+ReadEvoNarc = narcreader("/root/poketool/personal/evo.narc")
+ReadWazaNarc = narcreader("/root/poketool/waza/waza_tbl.narc")
+ReadEncNarc = narcreader("/root/fielddata/encountdata/enc_data.narc")
+ReadEventNarc = narcreader("/root/fielddata/eventdata/zone_event.narc")
+ReadScriptNarc = narcreader("/root/fielddata/script/scr_seq.narc")
+
+WriteScriptNarc = narcwriter("/root/fielddata/script/scr_seq.narc")
+WriteEncNarc = narcwriter("/root/fielddata/encountdata/enc_data.narc")
+WriteEventNarc = narcwriter("/root/fielddata/eventdata/zone_event.narc")
+WriteWOTblNarc = narcwriter("/root/poketool/personal/wotbl.narc")
+WriteMsgNarc = narcwriter("/root/msgdata/msg.narc")
+WriteTrNarc = narcwriter("/root/poketool/trainer/trdata.narc")
+WriteTrPokeNarc = narcwriter("/root/poketool/trainer/trpoke.narc")
+WriteEvoNarc = narcwriter("/root/poketool/personal/evo.narc")
+WritePersonalNarc = narcwriter("/root/poketool/personal/personal.narc")
+
 class PokeEditDlg(QDialog, ui_pprepokeedit.Ui_PokeEditDlg):
     def __init__(self,parent=None):
         super(PokeEditDlg,self).__init__(parent)
@@ -1146,7 +933,7 @@ class MapDlg(QDialog, ui_ppremapedit.Ui_mapDlg):
         self.uMapNames=[]
         self.nameToI=[]
         try:
-            mapfile = open(mw.rom.getFolder()+"/mapinfo.bin","r")
+            mapfile = open("/tmp/mapinfo.bin","r")
             mapinfo = pickle.load(mapfile)
             self.mapNames = mapinfo["mapnames"]
             self.iToName = mapinfo["iToName"]
@@ -1172,7 +959,7 @@ class MapDlg(QDialog, ui_ppremapedit.Ui_mapDlg):
                     if self.mapNames[i]==self.uMapNames[j]:
                         self.nameToI[i]=j
                         self.iToName[j]=i
-            mapfile = open(mw.rom.getFolder()+"/mapinfo.bin","w")
+            mapfile = open("/tmp/mapinfo.bin","w")
             mapinfo = {"mapnames":self.mapNames,"iToName":self.iToName,"nameToI":self.nameToI,"codes":self.codes}
             pickle.dump(mapinfo,mapfile)
             mapfile.close()
@@ -2112,7 +1899,7 @@ class TmHmDlg(QDialog, ui_ppretmhmedit.Ui_TmHmEditDlg):
     def changedTm(self,event):
         num=self.chooseTm.currentIndex()
         num=0xF0BFC+num*0x2
-        arm9filename=mw.rom.getFolder()+"/arm9.bin"
+        arm9filename=mw.rom.getFullPath("/arm9.bin")
         fh=QFile(arm9filename)
         fh.open(QIODevice.ReadOnly)
         ds=QDataStream(fh)
